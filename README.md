@@ -8,7 +8,7 @@ Client
 - Sends photo to server
 - Receives ids of photos from server
 - Request photos from server
- 
+
 Server
 ------
 - Maintain list of users signed on
@@ -20,20 +20,20 @@ Server
 Project Setup
 =============
 
-For now let's put hapchat into it's own directory, with the idea of moving it to its' own repository once we get it together. 
+For now let's put hapchat into it's own directory, with the idea of moving it to its' own repository once we get it together.
 
 We'll create a hapi server with slides being served in the 'presentation' directory until someone comes up with a better idea.
 
 Initial Plan
 ============
 
-This is just a better plan than I had voiced in the meeting earlier. I put this stuff in here just to have placeholders really, there's nothing we can't change. I just thought that this was a good 
+This is just a better plan than I had voiced in the meeting earlier. I put this stuff in here just to have placeholders really, there's nothing we can't change. I just thought that this was a good
 
 * Introduce hapi
   * create project, normal setup, go over server options, refer people to reference
   * create a deployment or something so it's immediately testable
   * this is psuedo boring - we need to move into ...
-* Routes
+* Routes (James)
   * Introduce hapi routing
   * create route for IDs && individual ID
   * create upload route
