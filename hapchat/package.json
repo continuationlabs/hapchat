@@ -1,0 +1,31 @@
+{
+  "name": "hapchat",
+  "version": "1.0.0",
+  "description": "Fast and fun conversation using hapi",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nvcexploder/hapchat"
+  },
+  "engines": {
+    "node": ">=0.10.32"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hapi",
+    "chat",
+    "training"
+  ],
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/nvcexploder/hapchat/raw/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "hapi": "6.x.x"
+  }
+}
