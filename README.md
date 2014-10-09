@@ -31,6 +31,7 @@ This is just a better plan than I had voiced in the meeting earlier. I put this 
 
 * Introduce hapi
   * create project, normal setup, go over server options, refer people to reference
+  * create a deployment or something so it's immediately testable
   * this is psuedo boring - we need to move into ...
 * Routes
   * Introduce hapi routing
