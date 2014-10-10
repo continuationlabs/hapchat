@@ -26,6 +26,7 @@
     }
   ],
   "dependencies": {
+    "handlebars": "2.0.x",
     "hapi": "6.x.x"
   }
 }
