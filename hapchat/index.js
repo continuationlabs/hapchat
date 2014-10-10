@@ -18,8 +18,21 @@ internals.main = function main() {
     // Register plugins
 
     // Register routes
-    // server.route([
-    // ]);
+    server.route({
+        method: 'POST',
+        path: '/upload',
+        config: Handlers.upload
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/{param*}',
+        handler: {
+            directory: {
+                path: 'public'
+            }
+        }
+    });
 
     server.start(function start() {
 
