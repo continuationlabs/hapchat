@@ -1,5 +1,6 @@
 // Load modules
 
+var Path = require('path');
 var Hapi = require('hapi');
 var Handlers = require('./lib/handlers');
 
@@ -13,18 +14,46 @@ var internals = {
 
 internals.main = function main() {
 
-    var server = new Hapi.Server(internals.port);
+    var server = new Hapi.Server(internals.port, {
+        app: {
+            oneDay: 86400000
+        }
+    });
+
+    server.views({
+        engines: {
+            html: require('handlebars')
+        },
+        path: Path.join(__dirname, 'static', 'views')
+    });
 
     // Register plugins
 
     // Register routes
-    // server.route([
-    // ]);
+    server.route([{
+        method: 'GET',
+        path: '/static/{path*}',
+        config: {
+            handler: {
+                directory: {
+                    path: Path.join(__dirname, 'public'),
+                    index: false
+                }
+            },
+            cache: {
+                expiresIn: server.settings.app.oneDay * 10
+            }
+        }
+    }, {
+        method: 'GET',
+        path: '/',
+        handler: Handlers.home
+    }]);
 
     server.start(function start() {
 
-        console.log('Hello Hapchat!');
+        console.log('Hapchat started at ' + server.info.uri);
     });
-}
+};
 
 internals.main();
