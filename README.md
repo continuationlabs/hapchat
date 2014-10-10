@@ -1,4 +1,4 @@
-![hapchat Logo](https://raw.github.com/nvcexploder/hapchat/master/images/hapchat.png)
+![hapchat Logo](https://raw.githubusercontent.com/nvcexploder/hapchat/master/images/hapchat.png?token=885557__eyJzY29wZSI6IlJhd0Jsb2I6bnZjZXhwbG9kZXIvaGFwY2hhdC9tYXN0ZXIvaW1hZ2VzL2hhcGNoYXQucG5nIiwiZXhwaXJlcyI6MTQxMzU2MzIxNH0%3D--81ffe88501d6f89ecd0c30cad66e18524240d4b9)
 
 hapchat
 =======
