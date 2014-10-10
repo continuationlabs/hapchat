@@ -1,3 +1,5 @@
+![hapchat Logo](https://raw.github.com/nvcexploder/hapchat/master/images/hapchat.png)
+
 hapchat
 =======
 
