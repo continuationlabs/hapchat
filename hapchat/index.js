@@ -48,6 +48,10 @@ internals.main = function main() {
         method: 'GET',
         path: '/',
         handler: Handlers.home
+    }, {
+        method: 'POST',
+        path: '/upload',
+        config: Handlers.upload
     }]);
 
     server.start(function start() {

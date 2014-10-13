@@ -16,3 +16,5 @@ config.json
 coverage.*
 lib-cov
 complexity.md
+*.db
+hapchat/public/photos/*.jpg
