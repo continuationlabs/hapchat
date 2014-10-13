@@ -30,12 +30,6 @@ internals.main = function main() {
     // Register plugins
 
     // Register routes
-    server.route({
-        method: 'POST',
-        path: '/upload',
-        config: Handlers.upload
-    });
-
     server.route([{
         method: 'GET',
         path: '/static/{path*}',
