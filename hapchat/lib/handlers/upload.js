@@ -1,3 +1,5 @@
+// Load modules
+
 var Async = require('async');
 var Uuid = require('node-uuid');
 var Path = require('path');
@@ -5,8 +7,12 @@ var Hoek = require('hoek');
 var Boom = require('boom');
 var Fs = require('fs');
 
-var Db = require('../data');
 //var Hapami = require('../hapami')
+
+
+// Declare internals
+
+var internals = {};
 
 
 module.exports = {
@@ -16,13 +22,13 @@ module.exports = {
     },
     handler: function (request, reply) {
 
+        var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
         var userId = Hoek.reach(request, 'server.auth.credentials.SOMEID');
 
-
         var writeToDb = function (next) {
 
-            Db.get('hapchat', function (err, hapchat) {
+            db.get('hapchat', function (err, hapchat) {
 
                 if (err) {
                     hapchat = [];
@@ -34,7 +40,7 @@ module.exports = {
                     date: new Date()
                 });
 
-                Db.put('hapchat', hapchat, next);
+                db.put('hapchat', hapchat, next);
             });
         };
 
