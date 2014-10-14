@@ -29,7 +29,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         },
         {
             method: 'GET',
-            path: '/{path*}',
+            path: '/static/{path*}',
             config: {
                 handler: {
                     directory: {
