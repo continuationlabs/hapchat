@@ -23,6 +23,11 @@ module.exports.registerRoutes = function registerRoutes(server) {
             handler: Handlers.home
         },
         {
+            method: 'GET',
+            path: '/photo',
+            handler: Handlers.photo
+        },
+        {
             method: 'POST',
             path: '/upload',
             config: Handlers.upload
@@ -33,7 +38,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
             config: {
                 handler: {
                     directory: {
-                        path: Path.join(server.settings.app.root, 'public'),
+                        path: Path.join(server.settings.app.root, 'static'),
                         index: false
                     }
                 },
@@ -60,7 +65,7 @@ module.exports.initPaths = function initPaths(root) {
     }
 
     try {
-        var photosDir = Path.join(root, 'public', 'photos');
+        var photosDir = Path.join(root, 'static', 'photos');
 
         Fs.mkdirSync(photosDir);
     }

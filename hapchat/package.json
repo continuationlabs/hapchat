@@ -26,12 +26,12 @@
     }
   ],
   "dependencies": {
-    "async": "^0.9.0",
-    "boom": "^2.5.1",
+    "async": "0.9.x",
+    "boom": "2.x.x",
     "handlebars": "2.0.x",
     "hapi": "6.x.x",
-    "hoek": "^2.5.1",
-    "level": "^0.18.0",
-    "node-uuid": "^1.4.1"
+    "hoek": "^2.x.x",
+    "level": "0.18.x",
+    "node-uuid": "1.4.x"
   }
 }
