@@ -23,9 +23,9 @@
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/upload">Upload</a></li>
+                    {{#each nav}}
+                    <li><a href="{{path}}">{{name}}</a></li>
+                    {{/each}}
                 </ul>
                 <form class="navbar-form navbar-left" _lpchecked="1">
                     <input type="text" class="form-control col-lg-8" placeholder="Search">

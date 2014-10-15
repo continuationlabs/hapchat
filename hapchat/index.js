@@ -47,6 +47,7 @@ internals.main = function main() {
 
     // Register routes
     Lib.registerRoutes(server);
+    Lib.registerMethods(server);
 
     // Server extension points
     server.ext('onPreResponse', function (request, reply) {
@@ -54,10 +55,15 @@ internals.main = function main() {
         if (request.response.variety === 'view') {
             request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
             request.response.source.context.path = request.path;
+            server.methods.getNav(false, function (error, result) {
+
+                request.response.source.context.nav = result;
+                reply();
+            });
         }
-
-        reply();
-
+        else {
+            reply();
+        }
     });
 
     // Start the server
