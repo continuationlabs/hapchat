@@ -17,4 +17,4 @@ coverage.*
 lib-cov
 complexity.md
 *.db
-./static/photos/*.*
+hapchat/static/photos/*.*
