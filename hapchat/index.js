@@ -3,6 +3,8 @@
 var Path = require('path');
 var Hapi = require('hapi');
 var Lib = require('./lib');
+var Hoek = require('hoek');
+var Package = require('./package.json');
 
 
 // Declare internals
@@ -21,7 +23,12 @@ internals.main = function main() {
         app: {
             oneDay: 86400000,
             root: __dirname,
-            db: Lib.data.initDb()
+            db: Lib.data.initDb(),
+            globalContext: {
+                name: 'HapChat',
+                year: new Date().getFullYear(),
+                version: Package.version
+            }
         }
     });
 
@@ -30,13 +37,28 @@ internals.main = function main() {
         engines: {
             html: require('handlebars')
         },
-        path: Path.join(__dirname, 'static', 'views')
+        path: Path.join(__dirname, 'static', 'views'),
+        layoutPath: Path.join(__dirname, 'static', 'views', 'layout'),
+        layout: true,
+        layoutKeyword: 'partial'
     });
 
     // Register plugins
 
     // Register routes
     Lib.registerRoutes(server);
+
+    // Server extension points
+    server.ext('onPreResponse', function (request, reply) {
+
+        if (request.response.variety === 'view') {
+            request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
+            request.response.source.context.path = request.path;
+        }
+
+        reply();
+
+    });
 
     // Start the server
     server.start(function start() {

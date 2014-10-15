@@ -17,4 +17,4 @@ var internals = {
 module.exports.initDb = function initDb() {
 
     return LevelUp(internals.path, internals.options);
-}
+};
