@@ -125,4 +125,23 @@
         }
     });
 
+
+    // Websockets
+    if ($('#feed').length) {
+        var path = 'ws://localhost:8000';
+        var socket = new WebSocket(path);
+        var imagesPath = 'http://localhost:8000/static/photos/';
+        var feed = $('#feed');
+
+        var processPhoto = function (msg) {
+
+            var imagePath = imagesPath + msg.data + '.png';
+            var container = $('<div></div>');
+            var image = $('<img />').attr('src', imagePath);
+
+            feed.prepend(container.append(image));
+        }
+
+        socket.onmessage = processPhoto;
+    }
 }(window, jQuery));

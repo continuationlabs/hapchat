@@ -32,6 +32,7 @@
     "hapi": "6.x.x",
     "hoek": "^2.x.x",
     "level": "0.18.x",
-    "node-uuid": "1.4.x"
+    "node-uuid": "1.4.x",
+    "ws": "^0.4.32"
   }
 }

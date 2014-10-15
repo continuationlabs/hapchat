@@ -12,4 +12,9 @@ module.exports.photo = function (request, reply) {
     reply.view('upload');
 };
 
+module.exports.feed = function (request, reply) {
+
+    reply.view('feed');
+};
+
 module.exports.upload = require('./upload');
