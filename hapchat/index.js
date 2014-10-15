@@ -55,7 +55,7 @@ internals.main = function main() {
         if (request.response.variety === 'view') {
             request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
             request.response.source.context.path = request.path;
-            server.methods.getNav(false, function (error, result) {
+            server.methods.getNav(true, function (error, result) {
 
                 request.response.source.context.nav = result;
                 reply();
