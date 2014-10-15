@@ -9,7 +9,7 @@ module.exports.home = function (request, reply) {
 
 module.exports.photo = function (request, reply) {
 
-    reply.view('photocap');
+    reply.view('upload');
 };
 
 module.exports.upload = require('./upload');

@@ -16,12 +16,7 @@ var internals = {};
 
 
 module.exports = {
-    description: 'Photo uploading endpoint',
     handler: function (request, reply) {
-
-        //console.log(request.payload)
-
-        //request.raw.req.pipe(process.stdout);
 
         var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
@@ -47,22 +42,10 @@ module.exports = {
 
         var writeToFile = function (next) {
 
-            var path = Path.join(__dirname, '../../static/photos', photoId + '.png');
-            var file = Fs.createWriteStream(path);
+            var path = Path.join(request.server.settings.app.root, 'static','photos', photoId + '.png');
+            var image = request.payload.image.replace(/^data:image\/png;base64,/, '');
 
-            var err = null;
-//request.raw.req.pipe(process.stdout);
-            try {
-                //request.payload.image.pipe(Fs.createWriteStream(path));
-                //request.raw.req.pipe(Fs.createWriteStream(path));
-                request.payload.image.pipe(file);
-            }
-            catch (e) {
-                err = e;
-                console.error(e);
-            }
-
-            next(err);
+            Fs.writeFile(path, image, { encoding: 'base64' }, next);
         };
 
         // broadcast photo information
@@ -81,7 +64,7 @@ module.exports = {
                 return reply(Boom.internal(err));
             }
 
-            return reply('OK');
+            return reply().code(200);
         });
     }
 };

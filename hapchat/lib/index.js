@@ -24,7 +24,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         },
         {
             method: 'GET',
-            path: '/photo',
+            path: '/upload',
             handler: Handlers.photo
         },
         {

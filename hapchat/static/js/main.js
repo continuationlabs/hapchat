@@ -1,5 +1,27 @@
 (function (window, $) {
 
+    var debounce = window.debounce = function (func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    var setActive = function (currentpath) {
+
+        $('.navbar a').parent().removeClass('active');
+        $('.navbar a[href="' + path + '"]').parent().addClass('active');
+
+    };
+
     var path = $('body').data('href');
 
     navigator.getUserMedia = navigator.getUserMedia ||
@@ -9,59 +31,53 @@
 
     var photoCapture = function () {
 
-        // http://www.purplesquirrels.com.au/2013/08/webcam-to-canvas-or-data-uri-with-html5-and-javascript/
+        var video = $('#videoElement').get(0);
+        var $fileSelect = $('#fileselect');
+        var $previewImage = $('#preview');
 
-        var video = document.querySelector("#videoElement");
-
-        if (navigator.getUserMedia) {
-
-            // get webcam feed if available
-            navigator.getUserMedia({video: true}, handleVideo, videoError);
-        }
-
-        function handleVideo (stream) {
+        var handleVideo = function (stream) {
 
             // if found attach feed to video element
             video.src = window.URL.createObjectURL(stream);
+        };
+
+        var videoError = function videoError () {
+
+            alert('Unable to access WebCam! Use the file uploader or use a different computer');
+
+        };
+
+        // http://www.purplesquirrels.com.au/2013/08/webcam-to-canvas-or-data-uri-with-html5-and-javascript/
+        if (navigator.getUserMedia) {
+
+            // get webcam feed if available
+            navigator.getUserMedia({ video: true }, handleVideo, videoError);
         }
 
-        function videoError () {
+        var capture = function () {
 
-            //TODO test this
-            alert('No webcam found. Try the file uploader or try a new computer!');
-            window.location.href = '/';
-        }
-
-        var videoElement = $('#videoElement').get(0);
-        var canvas = $('canvas').get(0);
-        var context = canvas.getContext('2d');
-        var canvasWidth = canvas.width;
-        var canvasHeight = canvas.height;
-        var imgtag = $('#imgtag'); // get reference to img tag
-        var sel = $('#fileselect'); // get reference to file select input element
-
-        function draw (videoElement, context, width, height) {
-
-            if(videoElement.paused || videoElement.ended) {
+            if (video.paused || video.ended) {
                 // if no video, exit here
                 return false;
             }
 
-            context.drawImage(videoElement, 0, 0, width, height); // draw video feed to canvas
+            var canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            var uri = canvas.toDataURL("image/png");
-            imgtag.attr('src', uri);
-        }
+            $('#preview').attr('src', canvas.toDataURL());
+        };
 
-        $('#freeze').on('click',function() {
+        $('#freeze').on('click',function () {
 
-            draw(videoElement, context, canvasWidth, canvasHeight); // when save button is clicked, draw video feed to canvas
+            capture();
         });
 
         $('#save').on('click', function () {
 
             var form = new FormData();
-            form.append('image', imgtag.attr('src'));
+            form.append('image', $previewImage.attr('src'));
 
             $.ajax({
                 url: '/upload',
@@ -69,50 +85,42 @@
                 data: form,
                 processData: false,
                 contentType: false
+            }).done(function () {
+
+                alert('Image was successfully uploaded');
+            }).fail(function () {
+
+                alert('There was a problem uploading your image')
+            }).always(function () {
+
+                $previewImage.attr('src','');
             });
         });
 
         // for iOS
+        $fileSelect.on('change', function () {
 
-        // create file reader
-        var fr;
-
-        sel.on('change',function(e){
-
+            var fileReader = new FileReader();
             // get selected file (camera capture)
-            var f = sel.files[0];
+            var files = $fileSelect.get(0).files;
+            var file = files[0];
 
-            fr = new FileReader();
-            fr.onload = function () {
+            fileReader = new FileReader();
+            fileReader.onload = function () {
 
-                imgtag.src = fs.result;
+                $previewImage.attr('src', fileReader.result);
             };
 
-            fr.readAsDataURL(f); // get captured image as data URI
+            // get captured image as data URI
+            fileReader.readAsDataURL(file);
         });
-
-
-
-            /*$.ajax({
-             type: 'POST',
-             url: '/upload',
-             //data: requestData.payload,
-             //contentType: 'multipart/form-data; boundary=' + requestData.boundary,
-             data: {
-             user: (new Date()).getTime(),
-             image: canvas[0].toDataURL('image/jpeg')
-             },
-             contentType: false,
-             processData: false,
-             cache: false//,
-             //success,
-             //failure
-             }); */
     };
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        if (path === '/photo') {
+        setActive(path);
+
+        if (path === '/upload') {
             photoCapture();
         }
     });
