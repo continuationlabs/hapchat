@@ -57,3 +57,8 @@ This is just a better plan than I had voiced in the meeting earlier. I put this 
   * install a couple and show what they do.
 
 Wrap up.
+
+## Useful Links
+
+- [Bootstrap Theme](http://bootswatch.com/united/)
+- [Bootstrap Documentation](http://getbootstrap.com/css/)
