@@ -34,6 +34,11 @@ module.exports.registerRoutes = function registerRoutes(server) {
         },
         {
             method: 'GET',
+            path: '/login',
+            handler: Handlers.login
+        },
+        {
+            method: 'GET',
             path: '/static/{path*}',
             config: {
                 handler: {
