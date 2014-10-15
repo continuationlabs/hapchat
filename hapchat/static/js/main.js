@@ -34,6 +34,20 @@
         var video = $('#videoElement').get(0);
         var $fileSelect = $('#fileselect');
         var $previewImage = $('#preview');
+        var $success = $('.alert-success');
+        var $failure = $('.alert-danger');
+
+        var printMessage = function (container, message) {
+
+            container.find('i').html('&nbsp' + message);
+            container.fadeIn(500, function () {
+
+                setTimeout(function () {
+
+                    container.fadeOut();
+                }, 3000);
+            });
+        };
 
         var handleVideo = function (stream) {
 
@@ -43,8 +57,7 @@
 
         var videoError = function videoError () {
 
-            alert('Unable to access WebCam! Use the file uploader or use a different computer');
-
+            printMessage($failure, 'Unable to access WebCam! Use the file uploader or use a different computer.');
         };
 
         // http://www.purplesquirrels.com.au/2013/08/webcam-to-canvas-or-data-uri-with-html5-and-javascript/
@@ -87,10 +100,10 @@
                 contentType: false
             }).done(function () {
 
-                alert('Image was successfully uploaded');
+                printMessage($success, 'Image was successfully uploaded.');
             }).fail(function () {
 
-                alert('There was a problem uploading your image')
+                printMessage($failure, 'There was a problem uploading your image.');
             }).always(function () {
 
                 $previewImage.attr('src','');

@@ -12,3 +12,11 @@
 .button-bar {
     margin: 10px 0;
 }
+
+footer p {
+    text-align: center;
+}
+
+.message-hide {
+    display: none;
+}
