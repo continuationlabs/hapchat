@@ -36,7 +36,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/feed',
-            handler: Handlers.feed
+            config: Handlers.feed
         },
         {
             method: 'GET',

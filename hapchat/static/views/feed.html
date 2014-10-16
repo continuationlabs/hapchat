@@ -1,2 +1,8 @@
 <h2>Feed</h2>
-<div id="feed"></div>
+<div id="feed">
+    {{#each files}}
+        <div>
+            <img src="/static/photos/{{this}}" />
+        </div>
+    {{~/each}}
+</div>
