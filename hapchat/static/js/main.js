@@ -141,9 +141,10 @@
 
     // Websockets
     if ($('#feed').length) {
-        var path = 'ws://localhost:8000';
+
+        var path = window.location.origin.replace('http', 'ws');
         var socket = new WebSocket(path);
-        var imagesPath = 'http://localhost:8000/static/photos/';
+        var imagesPath = window.location.origin + '/static/photos/';
         var feed = $('#feed');
 
         var processPhoto = function (msg) {

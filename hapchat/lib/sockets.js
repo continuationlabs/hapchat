@@ -7,33 +7,7 @@ var Uuid = require('node-uuid')
 // Declare internals
 
 var internals = {
-    sockets: {},
     server: null
-};
-
-internals.broadcast = function (msg, callback) {
-
-    var err = null;
-    var keys = Object.keys(internals.sockets);
-    for (var i = 0, il = keys.length; i < il; ++i) {
-        var socket = internals.sockets[keys[i]];
-        socket.send(msg);
-    }
-    callback(err);
-};
-
-
-internals.register = function (socket) {
-
-    var key = Uuid.v4();
-    internals.sockets.key = socket;
-
-    return key;
-};
-
-internals.unregister = function (key) {
-
-    delete internals.sockets.key;
 };
 
 
@@ -41,14 +15,16 @@ module.exports.init = function (server) {
 
     var ws = internals.server = new Ws.Server({ server: server.listener });
 
-    ws.on('connection', function (socket) {
+    ws.broadcast = function (data) {
 
-        var id = internals.register(socket);
-        socket.on('close', function () {
+        var keys = Object.keys(this.clients);
+        for (var i = 0, il = keys.length; i < il; ++i) {
+            var key = keys[i];
+            var socket = this.clients[i];
 
-            internals.unregister(id);
-        });
-    });
+            socket.send(data);
+        }
+    };
 
-    server.app.broadcast = internals.broadcast;
+    server.app.ws = ws;
 };
