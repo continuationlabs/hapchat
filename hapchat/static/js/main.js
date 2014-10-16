@@ -129,22 +129,10 @@
         });
     };
 
-    $(document).ready(function () {
+    var createSocket = function () {
 
-        setActive(path);
-
-        if (path === '/upload') {
-            photoCapture();
-        }
-    });
-}(window, jQuery));
-
-function (window, $) {
-
-    // Websockets
-    if (window.location.pathname === '/feed') {
-        var path = window.location.origin.replace('http', 'ws');
-        var socket = new WebSocket(path);
+        var socketPath = window.location.origin.replace('http', 'ws');
+        var socket = new WebSocket(socketPath);
         var imagesPath = window.location.origin + '/static/photos/';
         var feed = $('#feed');
 
@@ -159,4 +147,16 @@ function (window, $) {
 
         socket.onmessage = processPhoto;
     }
-}(window, JQuery));
+
+    $(document).ready(function () {
+
+        setActive(path);
+
+        if (path === '/upload') {
+            photoCapture();
+        }
+        if (path === '/feed') {
+            createSocket();
+        }
+    });
+}(window, jQuery));

@@ -29,12 +29,11 @@ module.exports = {
                 var filePath = Path.join(internals.path, file);
                 Fs.stat(filePath, function (err, stats) {
 
-                    var fileExtension = /\.[A-z0-9]+$/.exec(file)[0].replace('.','');
-                    var fileId = file.replace(fileExtension,'').replace(/\.$/,'');
+                    var fileparts = file.split('.');
                     filestats.push({
-                        id: fileId,
-                        extension: fileExtension,
-                        timestamp: stats.atime.getTime()
+                        id: fileparts[0],
+                        extension: fileparts[1],
+                        timestamp: stats.ctime.getTime()
                     });
 
                     next(err);
@@ -49,40 +48,27 @@ module.exports = {
 
         var sortFiles = function (files, next) {
 
-            // Do some sorting ...
+            files.sort(function (a, b) {
+
+                return (a.timestamp < b.timestamp);
+            });
 
             next(null, files);
         };
 
         var filterFiles = function (files, next) {
 
-            var oldFiles = [];
             var displayFiles = [];
 
             var now = new Date().getTime();
             var maxage = now - internals.maxAge;
 
-            var filterFile = function (file, next) {
-
-                if (file.timestamp < maxage) {
-                    oldFiles.push(file);
-                }
-                else {
+            for (var i = 0, il = files.length; i < il; ++i) {
+                var file = files[i];
+                if (file.timestamp > maxage) {
                     displayFiles.push(file);
                 }
-
-                next(null);
-            };
-
-            Async.each(files, filterFile, function (err) {
-
-                next(err, oldFiles, displayFiles);
-            });
-        };
-
-        var deleteFiles = function (oldFiles, displayFiles, next) {
-
-            // Delete old files
+            }
 
             next(null, displayFiles);
         };
@@ -91,8 +77,7 @@ module.exports = {
             getFiles,
             getStats,
             sortFiles,
-            filterFiles,
-            deleteFiles
+            filterFiles
         ], function (err, files) {
 
             if (err) {
