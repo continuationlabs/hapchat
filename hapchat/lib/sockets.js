@@ -6,14 +6,12 @@ var Uuid = require('node-uuid')
 
 // Declare internals
 
-var internals = {
-    server: null
-};
+var internals = {};
 
 
 module.exports.init = function (server) {
 
-    var ws = internals.server = new Ws.Server({ server: server.listener });
+    var ws = new Ws.Server({ server: server.listener });
 
     ws.broadcast = function (data) {
 
