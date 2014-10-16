@@ -12,12 +12,6 @@ var internals = {
 };
 
 
-internals.getFiles = function (next) {
-
-    Fs.readdir(internals.path, next)
-};
-
-
 module.exports = {
     handler: function (request, reply) {
 
@@ -35,8 +29,11 @@ module.exports = {
                 var filePath = Path.join(internals.path, file);
                 Fs.stat(filePath, function (err, stats) {
 
+                    var fileExtension = /\.[A-z0-9]+$/.exec(file)[0].replace('.','');
+                    var fileId = file.replace(fileExtension,'').replace(/\.$/,'');
                     filestats.push({
-                        name: file,
+                        id: fileId,
+                        extension: fileExtension,
                         timestamp: stats.atime.getTime()
                     });
 
@@ -68,10 +65,10 @@ module.exports = {
             var filterFile = function (file, next) {
 
                 if (file.timestamp < maxage) {
-                    oldFiles.push(file.name);
+                    oldFiles.push(file);
                 }
                 else {
-                    displayFiles.push(file.name);
+                    displayFiles.push(file);
                 }
 
                 next(null);

@@ -52,13 +52,7 @@ module.exports = {
         var broadcastInformation = function (next) {
 
             var ws = request.server.app.ws;
-
-            try {
-                ws.broadcast(photoId, next);
-            }
-            catch (e) {
-                return next(e);
-            }
+            ws.broadcast(photoId);
 
             return next(null);
         };

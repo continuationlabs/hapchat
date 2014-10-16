@@ -137,11 +137,12 @@
             photoCapture();
         }
     });
+}(window, jQuery));
 
+function (window, $) {
 
     // Websockets
-    if ($('#feed').length) {
-
+    if (window.location.pathname === '/feed') {
         var path = window.location.origin.replace('http', 'ws');
         var socket = new WebSocket(path);
         var imagesPath = window.location.origin + '/static/photos/';
@@ -150,12 +151,12 @@
         var processPhoto = function (msg) {
 
             var imagePath = imagesPath + msg.data + '.png';
-            var container = $('<div></div>');
-            var image = $('<img />').attr('src', imagePath);
+            var container = $('<div></div>').addClass('photoContainer');
+            var image = $('<img />').attr('src', imagePath).attr('alt','');
 
             feed.prepend(container.append(image));
         }
 
         socket.onmessage = processPhoto;
     }
-}(window, jQuery));
+}(window, JQuery));

@@ -1,8 +1,10 @@
 <h2>Feed</h2>
 <div id="feed">
     {{#each files}}
-        <div>
-            <img src="/static/photos/{{this}}" />
+        <div class="photoContainer">
+            <a href="/share/{{this.id}}">
+                <img src="/static/photos/{{this.id}}.{{this.extension}}" alt="" class="photo"/>
+            </a>
         </div>
     {{~/each}}
 </div>
