@@ -62,6 +62,37 @@ module.exports.registerRoutes = function registerRoutes(server) {
 };
 
 
+module.exports.registerMethods = function registerMethods(server) {
+
+    server.method('getNav', function (authenticated, next) {
+
+        var links = [{
+            name: 'Home',
+            path: '/'
+        }];
+
+        if (authenticated) {
+            links.push({
+                name: 'Upload',
+                path: '/upload'
+            },
+            {
+                name: 'Feed',
+                path: '/feed'
+            });
+        }
+        else {
+            links.push({
+                name: 'Login',
+                path: '/login'
+            });
+        }
+
+        next(null, links, 0);
+    });
+};
+
+
 module.exports.initPaths = function initPaths(root) {
 
     try {
