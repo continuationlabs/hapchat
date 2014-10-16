@@ -16,6 +16,7 @@ var internals = {};
 
 
 module.exports = {
+    auth: 'session',
     handler: function (request, reply) {
 
         var db = request.server.settings.app.db;
