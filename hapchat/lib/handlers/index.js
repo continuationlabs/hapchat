@@ -17,4 +17,6 @@ module.exports.login = function (request, reply) {
     reply.view('login');
 };
 
+module.exports.feed = require('./feed');
+
 module.exports.upload = require('./upload');
