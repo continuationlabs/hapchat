@@ -20,6 +20,7 @@ module.exports = {
         var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
         var user = Hoek.reach(request, 'server.auth.credentials.profile');
+        console.log(':: USER ::', request.server.auth)
 
         var writeToDb = function (next) {
 
