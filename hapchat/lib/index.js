@@ -38,7 +38,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/login',
-            config: Handlers.login.github
+            config: Handlers.login
         },
         {
             method: 'GET',
@@ -122,15 +122,6 @@ module.exports.registerStrategies = function (server) {
         isSecure: false,
         redirectTo: '/login',
         ttl: server.app.oneDay
-    });
-
-    // Facebook third party auth
-    server.auth.strategy('facebook', 'bell', {
-        provider: 'facebook',
-        password: 'cookie_encryption_password',
-        clientId: '966006790093008',
-        clientSecret: '8473cd8260b4b60671236784b5c729b8',
-        isSecure: false
     });
 
     // Github third party auth

@@ -8,19 +8,7 @@ var internals = {
 };
 
 
-module.exports.facebook = {
-    auth: 'facebook',
-    handler: function (request, reply) {
-
-        if (request.auth.isAuthenticated) {
-            request.auth.session.set(request.auth.credentials);
-        }
-
-        return reply.redirect(internals.redirectTo);
-    }
-};
-
-module.exports.github = {
+module.exports = {
     auth: 'github',
     handler: function (request, reply) {
 
