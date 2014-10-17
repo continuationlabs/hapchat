@@ -38,7 +38,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/login',
-            config: Handlers.login
+            config: Handlers.login.github
         },
         {
             method: 'GET',

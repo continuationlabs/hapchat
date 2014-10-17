@@ -77,7 +77,7 @@ internals.main = function main() {
             cookie: 'sid',
             isSecure: false,
             redirectTo: '/login',
-            ttl: 24 * 60 * 60 * 1000                          // 1 Day
+            ttl: server.app.oneDay
         });
 
         // Facebook third party auth
@@ -86,8 +86,18 @@ internals.main = function main() {
             password: 'cookie_encryption_password',
             clientId: '966006790093008',
             clientSecret: '8473cd8260b4b60671236784b5c729b8',
-            isSecure: false     // required
+            isSecure: false
         });
+
+        // Github third party auth
+        server.auth.strategy('github', 'bell', {
+            provider: 'github',
+            password: 'cookie_encryption_password',
+            clientId: 'd40df1c0836ce9f1ca10',
+            clientSecret: '1916660d600d84974d27911b1fe7983c7946cd8b',
+            isSecure: false
+        });
+        
 
         // Register routes
         Lib.registerRoutes(server);
