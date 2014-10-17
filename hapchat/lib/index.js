@@ -10,6 +10,7 @@ var Handlers = require('./handlers');
 
 module.exports = {
     data: require('./data'),
+    sockets: require('./sockets'),
     handlers: Handlers
 };
 
@@ -34,6 +35,11 @@ module.exports.registerRoutes = function registerRoutes(server) {
             method: 'POST',
             path: '/upload',
             config: Handlers.upload
+        },
+        {
+            method: 'GET',
+            path: '/feed',
+            config: Handlers.feed
         },
         {
             method: 'GET',
@@ -73,6 +79,10 @@ module.exports.registerMethods = function registerMethods(server) {
             links.push({
                 name: 'Upload',
                 path: '/upload'
+            },
+            {
+                name: 'Feed',
+                path: '/feed'
             });
         }
         else {

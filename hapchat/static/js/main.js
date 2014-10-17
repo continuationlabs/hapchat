@@ -129,6 +129,25 @@
         });
     };
 
+    var createSocket = function () {
+
+        var socketPath = window.location.origin.replace('http', 'ws');
+        var socket = new WebSocket(socketPath);
+        var imagesPath = window.location.origin + '/static/photos/';
+        var feed = $('#feed');
+
+        var processPhoto = function (msg) {
+
+            var imagePath = imagesPath + msg.data + '.png';
+            var container = $('<div></div>').addClass('photoContainer');
+            var image = $('<img />').attr('src', imagePath).attr('alt','');
+
+            feed.prepend(container.append(image));
+        }
+
+        socket.onmessage = processPhoto;
+    }
+
     $(document).ready(function () {
 
         setActive(path);
@@ -136,6 +155,8 @@
         if (path === '/upload') {
             photoCapture();
         }
+        if (path === '/feed') {
+            createSocket();
+        }
     });
-
 }(window, jQuery));

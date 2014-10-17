@@ -50,7 +50,10 @@ module.exports = {
         // broadcast photo information
         var broadcastInformation = function (next) {
 
-            next(null);
+            var ws = request.server.app.ws;
+            ws.broadcast(photoId);
+
+            return next(null);
         };
 
         Async.parallel([

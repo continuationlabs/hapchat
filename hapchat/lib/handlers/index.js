@@ -14,4 +14,6 @@ module.exports.photo = function (request, reply) {
 
 module.exports.login = require('./login')
 
+module.exports.feed = require('./feed');
+
 module.exports.upload = require('./upload');

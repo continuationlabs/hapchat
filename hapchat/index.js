@@ -81,8 +81,10 @@ internals.main = function main() {
         // Start the server
         server.start(function start() {
 
+            // Initilize web sockets
+            Lib.sockets.init(server);
+
             console.log('Hapchat started at ' + server.info.uri);
-        });
     });
 };
 
