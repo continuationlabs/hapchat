@@ -141,4 +141,4 @@ module.exports.registerStrategies = function (server) {
         clientSecret: '1916660d600d84974d27911b1fe7983c7946cd8b',
         isSecure: false
     });
-}
+};
