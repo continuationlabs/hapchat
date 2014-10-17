@@ -7,8 +7,6 @@ var Hoek = require('hoek');
 var Boom = require('boom');
 var Fs = require('fs');
 
-//var Hapami = require('../hapami')
-
 
 // Declare internals
 
@@ -21,7 +19,7 @@ module.exports = {
 
         var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
-        var userId = Hoek.reach(request, 'server.auth.credentials.SOMEID');
+        var user = Hoek.reach(request, 'server.auth.credentials.profile');
 
         var writeToDb = function (next) {
 
@@ -33,7 +31,7 @@ module.exports = {
 
                 hapchat.push({
                     id: photoId,
-                    user: userId,
+                    user: user,
                     date: new Date()
                 });
 

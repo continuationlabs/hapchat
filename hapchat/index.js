@@ -44,8 +44,6 @@ internals.main = function main() {
         layoutKeyword: 'partial'
     });
 
-    // Register plugins
-
     // Register methods
     Lib.registerMethods(server);
 
@@ -55,7 +53,7 @@ internals.main = function main() {
         if (request.response.variety === 'view') {
             request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
             request.response.source.context.path = request.path;
-console.log(':: AUTH ::', request.auth)
+
             server.methods.getNav(request.auth.isAuthenticated, function (error, result) {
 
                 request.response.source.context.nav = result;
@@ -67,41 +65,38 @@ console.log(':: AUTH ::', request.auth)
         }
     });
 
-    // Register bell with the server
-    server.pack.register(Bell, function (err) {
+    // Register plugins
+    server.pack.register([
+        HapiAuthCookie,
+        Bell
+    ], function (err) {
 
-        // Declare an authentication strategy using the bell scheme
-        // with the name of the provider, cookie encryption password,
-        // and the OAuth client credentials.
+        // Set session
+        server.auth.strategy('session', 'cookie', {
+            password: 'cookie_encryption_password',
+            cookie: 'sid',
+            isSecure: false,
+            redirectTo: '/login',
+            ttl: 24 * 60 * 60 * 1000                          // 1 Day
+        });
 
-        var provider = Bell.providers.facebook();
-
+        // Facebook third party auth
         server.auth.strategy('facebook', 'bell', {
-            provider: provider,
+            provider: 'facebook',
             password: 'cookie_encryption_password',
             clientId: '966006790093008',
             clientSecret: '8473cd8260b4b60671236784b5c729b8',
-            isSecure: false     // Terrible idea but required if not using HTTPS
+            isSecure: false     // required
         });
 
-        server.pack.register(HapiAuthCookie, function (err) {
-
-            server.auth.strategy('session', 'cookie', {
-                password: 'secret',
-                cookie: 'sid-example',
-                redirectTo: '/login',
-                isSecure: false
-            });
-
-            // Register routes
-            Lib.registerRoutes(server);
+        // Register routes
+        Lib.registerRoutes(server);
 
 
-            // Start the server
-            server.start(function start() {
+        // Start the server
+        server.start(function start() {
 
-                console.log('Hapchat started at ' + server.info.uri);
-            });
+            console.log('Hapchat started at ' + server.info.uri);
         });
     });
 };

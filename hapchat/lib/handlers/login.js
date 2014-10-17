@@ -3,7 +3,9 @@
 
 // Set Internals
 
-var internals = {};
+var internals = {
+    redirectTo: '/upload'
+};
 
 
 module.exports = {
@@ -14,6 +16,6 @@ module.exports = {
             request.auth.session.set(request.auth.credentials);
         }
 
-        reply.redirect('/');
+        return reply.redirect(internals.redirectTo);
     }
 };
