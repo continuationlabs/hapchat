@@ -26,7 +26,10 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/upload',
-            handler: Handlers.photo
+            config: {
+                auth: 'session',
+                handler: Handlers.photo
+            }
         },
         {
             method: 'POST',
@@ -41,12 +44,13 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/login',
-            handler: Handlers.login
+            config: Handlers.login
         },
         {
             method: 'GET',
             path: '/static/{path*}',
             config: {
+                auth: 'session',
                 handler: {
                     directory: {
                         path: Path.join(server.settings.app.root, 'static'),
@@ -116,4 +120,26 @@ module.exports.initPaths = function initPaths(root) {
             throw err;
         }
     }
+};
+
+
+module.exports.registerStrategies = function (server) {
+
+    // Set session
+    server.auth.strategy('session', 'cookie', {
+        password: 'cookie_encryption_password',
+        cookie: 'sid',
+        isSecure: false,
+        redirectTo: '/login',
+        ttl: server.app.oneDay
+    });
+
+    // Github third party auth
+    server.auth.strategy('github', 'bell', {
+        provider: 'github',
+        password: 'cookie_encryption_password',
+        clientId: 'd40df1c0836ce9f1ca10',
+        clientSecret: '1916660d600d84974d27911b1fe7983c7946cd8b',
+        isSecure: false
+    });
 };

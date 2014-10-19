@@ -12,10 +12,7 @@ module.exports.photo = function (request, reply) {
     reply.view('upload');
 };
 
-module.exports.login = function (request, reply) {
-
-    reply.view('login');
-};
+module.exports.login = require('./login')
 
 module.exports.feed = require('./feed');
 

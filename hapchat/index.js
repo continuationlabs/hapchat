@@ -1,5 +1,6 @@
 // Load modules
-
+var Bell = require('bell');
+var HapiAuthCookie = require('hapi-auth-cookie');
 var Path = require('path');
 var Hapi = require('hapi');
 var Lib = require('./lib');
@@ -43,10 +44,7 @@ internals.main = function main() {
         layoutKeyword: 'partial'
     });
 
-    // Register plugins
-
-    // Register routes
-    Lib.registerRoutes(server);
+    // Register methods
     Lib.registerMethods(server);
 
     // Server extension points
@@ -55,7 +53,8 @@ internals.main = function main() {
         if (request.response.variety === 'view') {
             request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
             request.response.source.context.path = request.path;
-            server.methods.getNav(true, function (error, result) {
+
+            server.methods.getNav(request.auth.isAuthenticated, function (error, result) {
 
                 request.response.source.context.nav = result;
                 reply();
@@ -66,13 +65,26 @@ internals.main = function main() {
         }
     });
 
-    // Start the server
-    server.start(function start() {
+    // Register plugins
+    server.pack.register([
+        HapiAuthCookie,
+        Bell
+    ], function (err) {
 
-        // Initilize web sockets
-        Lib.sockets.init(server);
+        // Registery auth strategies
+        Lib.registerStrategies(server);
 
-        console.log('Hapchat started at ' + server.info.uri);
+        // Register routes
+        Lib.registerRoutes(server);
+
+
+        // Start the server
+        server.start(function start() {
+
+            // Initilize web sockets
+            Lib.sockets.init(server);
+
+            console.log('Hapchat started at ' + server.info.uri);
     });
 };
 
