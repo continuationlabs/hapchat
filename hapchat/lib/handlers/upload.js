@@ -7,9 +7,6 @@ var Hoek = require('hoek');
 var Boom = require('boom');
 var Fs = require('fs');
 
-//var Hapami = require('../hapami')
-
-
 // Declare internals
 
 var internals = {};

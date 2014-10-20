@@ -1,0 +1,10 @@
+<h2>Feed</h2>
+<div id="feed">
+    {{#each files}}
+        <a href="/photos/{{this.id}}">
+            <div class="photo-container col-md-6 col-sm-12">
+                <img src="/static/photos/{{this.id}}.{{this.extension}}" alt="" class="hapchat-photo"/>
+            </div>
+        </a>
+    {{~/each}}
+</div>
