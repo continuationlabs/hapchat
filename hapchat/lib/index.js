@@ -9,7 +9,6 @@ var Handlers = require('./handlers');
 
 
 module.exports = {
-    data: require('./data'),
     sockets: require('./sockets'),
     handlers: Handlers
 };
