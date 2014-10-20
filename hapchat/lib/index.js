@@ -25,10 +25,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/upload',
-            config: {
-                auth: 'session',
-                handler: Handlers.uploadView
-            }
+            config: Handlers.uploadView
         },
         {
             method: 'POST',
@@ -54,7 +51,6 @@ module.exports.registerRoutes = function registerRoutes(server) {
             method: 'GET',
             path: '/static/{path*}',
             config: {
-                auth: 'session',
                 handler: {
                     directory: {
                         path: Path.join(server.settings.app.root, 'static'),

@@ -53,7 +53,7 @@ internals.main = function main() {
             request.response.source.context = Hoek.applyToDefaults(server.settings.app.globalContext, request.response.source.context || {});
             request.response.source.context.path = request.path;
 
-            server.methods.getNav(request.auth.isAuthenticated, function (error, result) {
+            server.methods.getNav(request.state.sid, function (error, result) {
 
                 request.response.source.context.nav = result;
                 reply();
