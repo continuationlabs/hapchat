@@ -10,7 +10,6 @@ module.exports.home = function (request, reply) {
 
 
 module.exports.uploadView = {
-    auth: 'session',
     handler: function (request, reply) {
 
         reply.view('upload');
