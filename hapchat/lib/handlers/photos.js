@@ -8,7 +8,7 @@ var Async = require('async');
 // Declare internals
 var internals = {
     maxAge: 1000 * 60 * 60 * 24 * 5,  // 5 days
-    path: Path.join(__dirname, '..','..','static','photos')
+    path: Path.join(__dirname, '..', '..', 'static', 'photos')
 };
 
 

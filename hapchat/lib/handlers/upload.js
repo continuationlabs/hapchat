@@ -16,28 +16,7 @@ module.exports = {
     auth: 'session',
     handler: function (request, reply) {
 
-        var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
-        var user = Hoek.reach(request, 'auth.credentials.profile');
-
-        var writeToDb = function (next) {
-
-            db.get('hapchat', function (err, hapchat) {
-
-                if (err) {
-                    hapchat = [];
-                }
-
-                hapchat.push({
-                    id: photoId,
-                    user: user,
-                    date: new Date()
-                });
-
-                db.put('hapchat', hapchat, next);
-            });
-        };
-
         var writeToFile = function (next) {
 
             var path = Path.join(request.server.settings.app.root, 'static','photos', photoId + '.png');
@@ -55,8 +34,7 @@ module.exports = {
             return next(null);
         };
 
-        Async.parallel([
-            writeToDb,
+        Async.series([
             writeToFile,
             broadcastInformation
         ], function (err) {
@@ -64,6 +42,8 @@ module.exports = {
             if (err) {
                 return reply(Boom.internal(err));
             }
+
+            console.info('%s successfully written to the file system.', photoId);
 
             return reply().code(200);
         });

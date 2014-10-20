@@ -24,7 +24,6 @@ internals.main = function main() {
         app: {
             oneDay: 86400000,
             root: __dirname,
-            db: Lib.data.initDb(),
             globalContext: {
                 name: 'HapChat',
                 year: new Date().getFullYear(),
