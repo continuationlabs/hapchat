@@ -7,7 +7,6 @@ var Joi = require('joi');
 var internals = {};
 
 module.exports = {
-    auth: 'session',
     handler: function (request, reply) {
 
         var photoId = request.params.photoId;

@@ -13,7 +13,6 @@ var internals = {};
 
 
 module.exports = {
-    auth: 'session',
     handler: function (request, reply) {
 
         var photoId = Uuid.v4();

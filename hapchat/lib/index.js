@@ -20,7 +20,12 @@ module.exports.registerRoutes = function registerRoutes(server) {
         {
             method: 'GET',
             path: '/',
-            handler: Handlers.home
+            config: {
+                auth: {
+                    mode: 'try'
+                },
+                handler: Handlers.home
+            }
         },
         {
             method: 'GET',
@@ -51,6 +56,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
             method: 'GET',
             path: '/static/{path*}',
             config: {
+                auth: false,
                 handler: {
                     directory: {
                         path: Path.join(server.settings.app.root, 'static'),
@@ -130,7 +136,6 @@ module.exports.registerStrategies = function (server) {
         password: 'cookie_encryption_password',
         cookie: 'sid',
         isSecure: false,
-        redirectTo: '/login',
         ttl: server.app.oneDay
     });
 
@@ -142,4 +147,6 @@ module.exports.registerStrategies = function (server) {
         clientSecret: '1916660d600d84974d27911b1fe7983c7946cd8b',
         isSecure: false
     });
+
+    server.auth.default('session');
 };
