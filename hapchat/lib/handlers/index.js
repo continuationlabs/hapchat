@@ -15,10 +15,7 @@ module.exports.uploadView = function (request, reply) {
 };
 
 
-module.exports.login = function (request, reply) {
-
-    reply.view('login');
-};
+module.exports.login = require('./login')
 
 
 module.exports.photos = require('./photos');

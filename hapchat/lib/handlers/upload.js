@@ -13,11 +13,12 @@ var internals = {};
 
 
 module.exports = {
+    auth: 'session',
     handler: function (request, reply) {
 
         var db = request.server.settings.app.db;
         var photoId = Uuid.v4();
-        var userId = Hoek.reach(request, 'server.auth.credentials.SOMEID');
+        var user = Hoek.reach(request, 'auth.credentials.profile');
 
         var writeToDb = function (next) {
 
@@ -29,7 +30,7 @@ module.exports = {
 
                 hapchat.push({
                     id: photoId,
-                    user: userId,
+                    user: user,
                     date: new Date()
                 });
 
