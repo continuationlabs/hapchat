@@ -9,13 +9,16 @@ module.exports.home = function (request, reply) {
 };
 
 
-module.exports.uploadView = function (request, reply) {
+module.exports.uploadView = {
+    auth: 'session',
+    handler: function (request, reply) {
 
-    reply.view('upload');
+        reply.view('upload');
+    }
 };
 
 
-module.exports.login = require('./login')
+module.exports.login = require('./login');
 
 
 module.exports.photos = require('./photos');

@@ -69,7 +69,7 @@ module.exports = {
 
             for (var i = 0, il = files.length; i < il; ++i) {
                 var file = files[i];
-                if (file.timestamp > maxage) {
+                if (file.timestamp > maxage && file.extension === 'png') {
                     displayFiles.push(file);
                 }
             }
