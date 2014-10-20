@@ -7,7 +7,6 @@ var Hoek = require('hoek');
 var Boom = require('boom');
 var Fs = require('fs');
 
-
 // Declare internals
 
 var internals = {};
@@ -43,6 +42,8 @@ module.exports = {
             if (err) {
                 return reply(Boom.internal(err));
             }
+
+            console.info('%s successfully written to the file system.', photoId);
 
             return reply().code(200);
         });

@@ -8,7 +8,7 @@ var Async = require('async');
 // Declare internals
 var internals = {
     maxAge: 1000 * 60 * 60 * 24 * 5,  // 5 days
-    path: Path.join(__dirname, '../../static/photos')
+    path: Path.join(__dirname, '..', '..', 'static', 'photos')
 };
 
 
@@ -31,6 +31,9 @@ module.exports = {
                 Fs.stat(filePath, function (err, stats) {
 
                     var fileparts = file.split('.');
+                    var extension = fileparts[0].toLowerCase();
+                    var id = fileparts[1];
+
                     filestats.push({
                         id: fileparts[0],
                         extension: fileparts[1],
@@ -85,7 +88,7 @@ module.exports = {
                 return reply(Boom.internal(err));
             }
 
-            return reply.view('feed', { files: files });
+            return reply.view('photos', { files: files });
         });
     }
-}
+};

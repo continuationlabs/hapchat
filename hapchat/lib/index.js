@@ -27,7 +27,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
             path: '/upload',
             config: {
                 auth: 'session',
-                handler: Handlers.photo
+                handler: Handlers.uploadView
             }
         },
         {
@@ -37,8 +37,13 @@ module.exports.registerRoutes = function registerRoutes(server) {
         },
         {
             method: 'GET',
-            path: '/feed',
-            config: Handlers.feed
+            path: '/photos',
+            config: Handlers.photos
+        },
+        {
+            method: 'GET',
+            path: '/photos/{photoId}',
+            config: Handlers.photo
         },
         {
             method: 'GET',
@@ -80,8 +85,8 @@ module.exports.registerMethods = function registerMethods(server) {
                 path: '/upload'
             },
             {
-                name: 'Feed',
-                path: '/feed'
+                name: 'Photos',
+                path: '/photos'
             });
         }
         else {

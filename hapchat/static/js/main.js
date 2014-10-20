@@ -14,15 +14,14 @@
             if (callNow) func.apply(context, args);
         };
     };
+    var path = $('body').data('href');
 
     var setActive = function (currentpath) {
 
         $('.navbar a').parent().removeClass('active');
-        $('.navbar a[href="' + path + '"]').parent().addClass('active');
-
+        $('.navbar a[href="' + currentpath + '"]').parent().addClass('active');
     };
 
-    var path = $('body').data('href');
 
     navigator.getUserMedia = navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -143,10 +142,10 @@
             var image = $('<img />').attr('src', imagePath).attr('alt','');
 
             feed.prepend(container.append(image));
-        }
+        };
 
         socket.onmessage = processPhoto;
-    }
+    };
 
     $(document).ready(function () {
 

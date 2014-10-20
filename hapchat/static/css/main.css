@@ -4,12 +4,12 @@
     width: 100%;
 }
 
-#preview {
+#preview, .hapchat-photo {
     width: 100%;
     margin: 0 auto;
 }
 
-.button-bar {
+.button-bar, .photo-container {
     margin: 10px 0;
 }
 
