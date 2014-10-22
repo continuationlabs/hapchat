@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>node production</title>
+
+		<meta name="description" content="node in a production environment">
+		<meta name="author" content="Lloyd Benson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="/css/reveal.min.css">
+		<link rel="stylesheet" href="/css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="/lib/css/zenburn.css">
+
+                <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+                <script>
+                        if( window.location.search.match( /print-pdf/gi ) ) {
+                                var link = document.createElement( 'link' );
+                                link.rel = 'stylesheet';
+                                link.type = 'text/css';
+                                link.href = '/css/print/pdf.css';
+                                document.getElementsByTagName( 'head' )[0].appendChild( link );
+                        }
+                </script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>node at walmart</h2>
+					<h3>experiences with node in production</h3>
+					<p>
+						<small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+					</p>
+					<p>
+						<a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+					</p>
+				</section>
+				<section>
+					<h3>whoami</h3>
+<p>
+                                        <ul>
+                                        <li>lloyd benson (lloyd.benson@gmail.com)</li>
+                                        <li>architect @walmartlabs node team</li>
+                                        <li>many hats (devops/sysadmin/developer/gluer)</li>
+                                        <li>the guy that did the black friday node release</li>
+                                        </ul>
+</p>
+				</section>
+				<section>
+					<h3>overview</h3>
+					<ul>
+                                           <li>hapi</li>
+                                           <li>getting started</li>
+                                           <li>releases</li>
+                                           <li>scale</li>
+                                           <li>monitor</li>
+                                           <li>issues</li>
+                                           <li>final thoughts</li>
+                                        </ul>
+				</section>
+				<section>
+<img src="/images/spumko/hapi.png" height=90 style="border:none; background:none; box-shadow:none;"/>
+<br/>
+					<ul>
+						<li><a href="http://hapijs.com">http://hapijs.com</a></li>
+                                                <li>framework for building applications and services</li>
+						<li>open source</li>
+						<li>configuration vs code</li>
+						<li>plugin architecture</li>
+						<li>request lifecycle extensibility</li>
+					</ul>
+				</section>
+				<section>
+					<h3><a href="http://github.com/spumko">spumko</a> ecosystem</h3>
+<center>
+<table>
+<tbody>
+<tr align=center>
+<td>
+<img src="/images/spumko/hapi.png" height=90 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/nipple.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/poop.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/bassmaster.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+</td>
+</tr>
+<tr align=center>
+<td>
+<img src="/images/spumko/good.png" height=75 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/joi.png" height=75 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/hoek.png" height=60 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/crumb.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+</td>
+</tr>
+<tr align=center>
+<td>
+<img src="/images/spumko/boom.png" height=65 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/tv.png" height=80 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/scooter.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/lout.png" height=65 style="border:none; background:none; box-shadow:none;"/>
+</td>
+</tr>
+<tr align=center>
+<td>
+<img src="/images/spumko/yar.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/catbox.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/shot.png" height=70 style="border:none; background:none; box-shadow:none;"/>
+<img src="/images/spumko/confidence.png" height=60 style="border:none; background:none; box-shadow:none;"/>
+</td>
+</tr>
+</tbody>
+</table>
+<br/>
+<span class="fragment">everyone poops, even hapi</span>
+				</section>
+				<section>
+					<h3>getting started</h3>
+					<ol>
+                                                <li>started out with a simple proxy</li>
+                                                <li>added analytics</li>
+                                                <li>took over endpoints</li>
+                                                <li>moved web components</li>
+                                                <li>node used throughout the organization</li>
+					</ol>
+<br/>
+<img src="/images/spumko/hapi.png" height=90 style="border:none; background:none; box-shadow:none;"/>
+<br/>
+the proxy was the most utilized feature
+				</section>
+				<section>
+					<h3>releases - simple plan</h3>
+					<ol>
+                                           <li>npm install; npm test</li>
+                                           <li>rm -rf node_modules</li>
+                                           <li>npm install --production</li>
+                                           <li>npm shrinkwrap</li>
+                                           <li>tar cvfz app-uniqueid.tar.gz</li>
+                                           <li>scp app-uniqueid.tar.gz user@host:</li>
+                                           <li>tar xvfz app-uniqueid.tar.gz</li>
+                                           <li>node server.js</li>
+                                        </ol>
+<br/>
+<br/>
+<p>I felt comfortable doing a black friday release</p>
+				</section>
+				<section>
+					<h3>releases - advice</h3>
+					<ul>
+						<li>release often</li>
+						<li>build once, push artifact</li>
+						<li>separate node version upgrades</li>
+						<li>keep configuration in 1 place</li>
+					</ul>
+<br/>
+<a href="http://github.com/spumko/confidence"><img src="/images/spumko/confidence.png" height=60 style="border:none; background:none; box-shadow:none;"/></a>
+<br/>
+manage configuration with confidence
+				</section>
+				<section>
+					<h3>releases - npm shrinkwrap</h3>
+					<ul>
+						<li>generates npm-shrinkwrap.json</li>
+						<li>lists ALL dependencies with versions</li>
+						<li>dependencies can break builds</li>
+						<li>compare shrinkwraps from previous builds</li>
+						<li>describes uniqueness</li>
+					</ul>
+				</section>
+				<section>
+					<h3>scale</h3>
+					<ul>
+                                           <li>load balance (multiproc vs container)</li>
+                                           <li>load test</li>
+                                           <li>auto restart</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>monitor</h3>
+<center>
+<table>
+<tbody>
+<tr>
+<td>
+<ul>
+<li>memory</li>
+<li>application data</li>
+<li>application tests</li>
+<li>application restarts</li>
+<li>open files</li>
+<li>os / system</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</center>
+				</section>
+				<section>
+					<h3>monitor - memory</h3>
+					<ul>
+                                           <li>rss memory - 3g upper limit</li>
+                                           <li>heap memory - 1.5g upper limit</li>
+                                           <li>aggressive gc at limits hurts performance</li>
+                                           <li>may not die quickly and become painful</li>
+                                           <li>set thresholds based on historical trends to catch leaks</li>
+					</ul>
+<img src="/images/spumko/hapi.png" height=90 style="border:none; background:none; box-shadow:none;"/>
+<br/>
+hapi config for rss memory, heap memory, and event loop delay
+				</section>
+				<section>
+					<h3>monitor - application data</h3>
+					<ul>
+                                           <li>requests, responses, errors, ops data</li>
+                                           <li>send application data to an aggregator</li>
+                                           <li>aggregators - splunk, logstash, big data</li>
+                                           <li>find leaks and performance issues with aggregator</li>
+					</ul>
+<a href="http://github.com/spumko/good"><img src="/images/spumko/good.png" height=75 style="border:none; background:none; box-shadow:none;"/></a>
+<br/>
+gather hapi requests, errors, and ops data with good
+				</section>
+				<section>
+					<h3>monitor - application tests</h3>
+					<ul>
+                                           <li>strive for 100% code coverage</li>
+                                           <li>prioritize integration over unit tests</li>
+                                           <li>run prod tests continually</li>
+                                           <li>trend test results</li>
+					</ul>
+<br/>
+<br/>
+testing can be done with the <a href="http://github.com/spumko/lab">lab</a> plugin
+				</section>
+				<section>
+					<h3>monitor - application restarts</h3>
+					<ul>
+                                           <li>avoid laziness with auto restart</li>
+                                           <li>still check for failures</li>
+					</ul>
+				</section>
+				<section>
+					<h3>monitor - open files</h3>
+					<ul>
+                                           <li>track open files on node process</li>
+                                           <li>generally boring but may be useful</li>
+                                           <li>can check infrequently</li>
+					</ul>
+				</section>
+				<section>
+					<h3>monitor - os / system</h3>
+					<ul>
+                                           <li>continue usual os / system checks</li>
+                                           <li>system wide scope</li>
+                                           <li>memory, cpu, swap, i/o, disk space, etc</li>
+                                           <li>cpu usage boring for black friday</li>
+					</ul>
+				</section>
+				<section>
+					<h3>issues</h3>
+					<ul>
+                                           <li>first we fixed our code</li>
+                                           <li>Walmart affected by numerous bugs in node core</li>
+                                           <li><a href="http://www.joyent.com/blog/walmart-node-js-memory-leak">http://www.joyent.com/blog/walmart-node-js-memory-leak</a></li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>issues - tools</h3>
+					<ul>
+                                           <li>--abort-on-uncaught-exception</li>
+                                           <li>gcore / mdb</li>
+                                           <li>dtrace</li>
+                                           <li>break down problem</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>issues - dtrace</h3>
+					<ul>
+                                           <li>some issues are difficult without dtrace</li>
+                                           <li>dtrace for node is ONLY available on SmartOS</li>
+                                           <li>dtrace can be a large time commitment for many</li>
+                                           <li>DTraceToolkit</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>final thoughts</h3>
+					<ul>
+                                           <li>node is fast</li>
+                                           <li>npm is a great tool to manage smaller components</li>
+                                           <li>releases can be easy</li>
+                                           <li>fast development times especially with hapi</li>
+                                           <li>monitoring is critical</li>
+                                           <li>Joyent support for difficult issues (linux too)</li>
+                                           <li>tools continue to improve (linux too)</li>
+                                        </ul>
+				</section>
+                                <section>
+                                        <h3>Questions / Comments</h3>
+                                        <p>
+                                                <small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+                                        </p>
+                                        <p>
+                                                <a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+                                        </p>
+                                </section>
+
+			</div>
+
+		</div>
+
+		<script src="/lib/js/head.min.js"></script>
+		<script src="/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
