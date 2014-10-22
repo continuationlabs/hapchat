@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>jenkins</title>
+
+		<meta name="description" content="jenkins">
+		<meta name="author" content="Lloyd Benson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="/css/reveal.min.css">
+		<link rel="stylesheet" href="/css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="/lib/css/zenburn.css">
+
+                <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+                <script>
+                        if( window.location.search.match( /print-pdf/gi ) ) {
+                                var link = document.createElement( 'link' );
+                                link.rel = 'stylesheet';
+                                link.type = 'text/css';
+                                link.href = '/css/print/pdf.css';
+                                document.getElementsByTagName( 'head' )[0].appendChild( link );
+                        }
+                </script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h3>continuous integration with jenkins</h3>
+					<h3>automating yourself out of a job</h3>
+					<h3>(one that you don't want)</h3>
+					<p>
+						<small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+					</p>
+					<p>
+						<a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+					</p>
+					<p>
+						<a href="http://github.com/lloydbenson/demo-jenkins"><small>http://github.com/lloydbenson/demo-jenkins</small></a>
+					</p>
+				</section>
+				<section>
+					<h3>whoami</h3>
+                                        <ul>
+                                        <li>lloyd benson (lloyd.benson@gmail.com)</li>
+                                        <li>@walmartlabs node team</li>
+                                        <li>many hats (devops/architect/sysadmin/web developer/gluer of all things)</li>
+                                        <li>the guy that did the black friday node release</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>goals</h3>
+                                        <ul>
+                                        <li>get you thinking about continuous integration</li>
+                                        <li>talk about a free open source solution (jenkins)</li>
+                                        <li>cover features</li>
+                                        <li>demonstrate usefulness</li>
+                                        <li>best practices</li>
+                                        <li>additional advice</li>
+                                        <li>advanced topics</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>what is continuous integration to you?</h3>
+<ul>
+<li class="fragment">automated feedback system on test failures / blame committers!</li>
+<li class="fragment">small autonomous changes to easily to tell what broke</li>
+<li class="fragment">continuous deployment to qa or prod?</li>
+<li class="fragment">reporting / trending of environments and project tests</li>
+</ul>
+				</section>
+				<section>
+					<h3>what continuous integration means to me</h3>
+A software methodology in which you can do small sets of changes that are automatically tracked, tested, and potentially deployed if successful from a commit.  If unsuccessful, it provides feedback in order to immediately revert or fix the problem quickly.  It should keep historical trending of failures so you can start making better decisions about general software management.
+				</section>
+				<section>
+					<h3>advantages of ci vs traditional integration</h3>
+<ul>
+<li>early detection of issues due to immediate testing</li>
+<li>revert codebase to a bug-free state without wasting time debugging</li>
+<li>avoid last-minute chaos at release dates</li>
+<li>avoid merge issue mess (due to slightly incompatible versions in everyones branches)</li>
+<li>easy isolation of bugs with smaller change sets</li>
+</ul>
+				</section>
+				<section>
+					<h3>advantages of ci (cont)</h3>
+<ul>
+<li>constant availability of a "current" build for testing, demo, or release purposes</li>
+<li>immediate feedback to developers on the quality, functionality, or system-wide impact of code they are writing</li>
+<li>forces more modular, less complex code due to frequent code pushes</li>
+<li>produces higher quality code due to metrics generated (such as code coverage, code complexity, unit/integration tests)</li>
+</ul>
+				</section>
+				<section>
+					<h3>disadvantages of ci</h3>
+<ul>
+<li>could be too much overhead if you have a very small app</li>
+<li>ci is only as good as your tests!</li>
+<li>it takes alot of commitment to keep up with tests</li>
+<li>ci software is always changing (like any software) and can break during upgrades. The irony!</li>
+</ul>
+				</section>
+				<section>
+					<h3>what is jenkins?</h3>
+<ul>
+<li>jenkins is open source continuous integration tool written in java</li>
+<li>a tool with a GUI that monitors executions of repeated jobs, such as building a software project or jobs run by cron.</li>
+<li>See <a href="https://jenkins-ci.org">https://jenkins-ci.org</a> for more details.</li>
+</ul>
+<br/>
+<img src="/images/jenkins/jenkins_logo.png" style="border:none; background:none; box-shadow:none;">
+				</section>
+				<section>
+					<h3>jenkins history</h3>
+<ul>
+<li>jenkins was originally developed as the hudson project</li>
+<li>hudson's creation started in summer of 2004 at sun microsystems</li>
+<li>the project was forked from hudson after a dispute with oracle</li>
+</ul>
+				</section>
+				<section>
+					<h3>why use jenkins?</h3>
+                                        <ul>
+					<li>take advantage of ci methodologies</li>
+					<li>abstract scripts to a GUI interface</li>
+					<li>built in restful api</li>
+					<li>extensibility (hooks and plugins to have it work how you need it to)</li>
+					<li>do not have to know java to effectively use it</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>why not use jenkins?</h3>
+<ul>
+<li>if you hate java and all it touches and ruby is the best, then this is likely not the tool for you</li>
+<li>you already have a tool that takes care of your needs and do not want to add complexity</li>
+<li>you have a tiny little project that will never grow</li>
+<li>you have deep respect for butlers and find the logo offensive</li>
+</ul>
+<br/>
+<img src="/images/jenkins/jenkins_logo.png" style="border:none; background:none; box-shadow:none;">
+				</section>
+				<section>
+					<h3>jenkins features</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<ul>
+<li>easy installation</li>
+<li>easy configuration</li>
+<li>change set support</li>
+<li>permanent links</li>
+<li>feedback integration</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>after-the-fact tagging</li>
+<li>test reporting</li>
+<li>distributed builds</li>
+<li>file fingerprinting</li>
+<li>plugin support</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+				</section>
+				<section>
+					<h3>easy installation</h3>
+<p>java -jar jenkins.war, or deploy it in a servlet container.  It is a flat file structure, no database to setup.</p>
+				</section>
+				<section>
+					<h3>easy configuration</h3>
+<p>jenkins can be configured entirely from the web GUI. You don't need tweak XML files, although for automation or configuration management, you will still be manipulating them.</p>
+				</section>
+				<section>
+					<h3>change set support</h3>
+<p>jenkins can generate a list of changes from the previous build.</p>
+				</section>
+				<section>
+					<h3>permanent links</h3>
+<p>jenkins gives you clean readable URLs for most of its pages, including some permalinks like "latest build" / "latest successful build", so that they can be easily linked from elsewhere.</p>
+				</section>
+				<section>
+					<h3>feedback integration</h3>
+<p>Monitor build results by RSS, e-mail, IM to get real-time notifications on failures.</p>
+				</section>
+				<section>
+					<h3>after-the-fact tagging</h3>
+<p>Builds can be tagged (to source control) after builds are completed.</p>
+				</section>
+				<section>
+					<h3>test reporting</h3>
+<p>JUnit/TestNG test reports can be tabulated, summarized, and displayed with historical information.  historical trending is plotted into a graph.</p>
+				</section>
+				<section>
+					<h3>distributed builds</h3>
+<p>jenkins can distribute build/test loads to multiple computers. This allows you to do OS specific builds, increase the number of jobs you can run, or idle workstations sitting beneath your desk.</p>
+				</section>
+				<section>
+					<h3>file fingerprinting</h3>
+<p>jenkins can keep track of which build produced which artifacts.  This works even for artifacts that are produced outside jenkins, and is ideal for projects to track dependency.</p>
+				</section>
+				<section>
+					<h3>plugin support</h3>
+<p>jenkins can be extended via 3rd party plugins. You can write your own plugins though you DO need to know java for this.</p>
+				</section>
+				<section>
+					<h3>development flow (pre-demo)</h3>
+<ul>
+<li>fork project (lloyddemo user)</li>
+<li>do a change and commit it to your own repo (lloyddemo user)</li>
+<li>submit a PR to the original repo (lloyddemo user)</li>
+<li>merge in PR if green (lloydbenson user)</li>
+<li>automatically test, build, and deploy your app (jenkins using lloyddemo user for PR and lloydbenson user for credentials for everything else)</li>
+</ul>
+				</section>
+				<section>
+					<h3>demo time</h3>
+<ul>
+<li>enough lecture already!</li>
+<li>hate watching demos and want to see what it does?
+<a href="http://github.com/lloydbenson/demo-jenkins">http://github.com/lloydbenson/demo-jenkins</a></li>
+<li>prepare, start, configure oh myyy</li>
+<li>test that when successful, jenkins automatically builds and deploys</li>
+<li>show pull request integration with github that uses the github api to show status</li>
+<li>with automation, there is more time for boring lecture!</li>
+</ul>
+				</section>
+				<section>
+					<h3>how did the demo work?</h3>
+<ul>
+<li>lloyddemo user has pull/push privs on repo where PR is done.  With this access, the ghprb plugin utilizes the github API via a key in order to use change status to pending and then finally pass or fail.  It will also use the jenkins URL you defined in your configuration for the link.</li>
+<li>demo.test and demo.pr do a poll every 1 min (do not recommend doing that but useful for demo and only temporary).
+</ul>
+				</section>
+				<section>
+					<h3>navigating jenkins</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<ul>
+<li>config / security</li>
+<li>updates / plugins</li>
+<li>simple / multi-config job</li>
+<li>scm setup</li>
+<li>build section</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>triggers / chaining</li>
+<li>console output</li>
+<li>trending</li>
+<li>dashboard</li>
+<li>change sets</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+				</section>
+				<section>
+					<h3>best practices</h3>
+There are numerous best practices.<br/>
+You can decide what is best for you or your organization.
+				</section>
+				<section>
+					<h3>security</h3>
+<ul>
+<li>always secure jenkins (it is not by default).</li>
+<li>AD / LDAP / local users (I had issues with the latest active directory plugin)</li>
+<li>by default anyone (anonymous) can do anything which means they will do anything!</li>
+<li>you may have sensitive data like apikeys</li>
+<li>audit trail plugin is useful for tracking jenkins changes</li>
+</ul>
+				</section>
+				<section>
+					<h3>backup</h3>
+<ul>
+<li>backup jenkins regularly</li>
+<li>easy to backup jenkins because of flat files</li>
+<li>make a backup jenkins job!</li>
+<li>especially important for upgrades</li>
+</ul>
+				</section>
+				<section>
+					<h3>fingerprinting</h3>
+<ul>
+<li>use file fingerprinting to manage dependencies</li>
+</ul>
+				</section>
+				<section>
+					<h3>source control management (SCM)</h3>
+<ul>
+<li>fully use source control (should be obvious these days)</li>
+<li>reliable builds will be clean builds (avoids typical "well it works on my machine" developer mantra)</li>
+<li>track your changes and easily revert</li>
+<li>good communication mechanism to collaborate with team or community</li>
+</ul>
+				</section>
+				<section>
+					<h3>issue tracking</h3>
+<ul>
+<li>tightly integrate with issue tracker</li>
+<li>reduce the need for maintaining a change log</li>
+<li>tie builds to defects</li>
+</ul>
+				</section>
+				<section>
+					<h3>repository view</h3>
+<ul>
+<li>tightly integrate with repository view tool (e.g. github or fisheye)</li>
+<li>repository browsing provides a graphical diff when an update happens</li>
+</ul>
+				</section>
+				<section>
+					<h3>trend reporting</h3>
+<ul>
+<li>project managers and developers can quickly visualize project progress status</li>
+<li>unit testing is often not enough to provide confidence that the delivered software complies to the desired quality</li>
+</ul>
+				</section>
+				<section>
+					<h3>complete tests</h3>
+<ul>
+<li>do as much testing as possible</li>
+<li>prioritize integration over unit tests</li>
+<li>run quick limited set of "smoke tests" before full test suite</li>
+</ul>
+
+				</section>
+				<section>
+					<h3>cleanup</h3>
+<ul>
+<li>allocate lots of disk space due to archives and history</li>
+<li>as with anything the more you keep, the worse the performance may be to keep track of it all</li>
+<li>archive/backup jobs before you fully delete them</li>
+<li>clean up after yourself (e.g. src directories)</li>
+<li>you can wipe workspace</li>
+<li>archive limits for number of days / builds</li>
+</ul>
+				</section>
+				<section>
+					<h3>job separation</h3>
+<ul>
+<li>separate jobs for each branch or release</li>
+<li>support parallel development efforts</li>
+</ul>
+				</section>
+				<section>
+					<h3>conflicts</h3>
+<ul>
+<li>if jobs require network, make sure to allocate different or random ports effectively as there may be parallel jobs running</li>
+<li>in node, we avoid this by injection to not even use the network stack</li>
+<li>think about potential race conditions</li>
+				</section>
+				<section>
+					<h3>manage time</h3>
+<ul>
+<li>do not run everything at once</li>
+<li>change job times to efficiently use the system</li>
+<li>add slaves to distribute if required</li>
+</ul>
+				</section>
+				<section>
+					<h3>feedback</h3>
+<ul>
+<li>setup feedback to ALL team members to improve communication</li>
+<li>ensure failures are reported as soon as possible</li>
+<li>periodically check communication mechanism to ensure its working</li>
+</ul>
+				</section>
+				<section>
+					<h3>identify success</h3>
+<ul>
+<li>tag / label / baseline after successful build</li>
+<li>if later you find unsuccessful, fix testing to avoid it next time</li>
+</ul>
+				</section>
+				<section>
+					<h3>utilize slaves</h3>
+<ul>
+<li>utilize slaves only for jobs if you need a large distributable system</li>
+<li>make sure high priority things have a dedicated hardware if queuing times are unreasonable</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>additional advice</h3>
+<ul>
+<li>decide one jenkins instance or multiple</li>
+<li>do not get crazy with plugins (maintanence nightmare)</li>
+<li>minimize permissions (maintanence nightmare) and try to start with trust!</li>
+<li>chaining is awesome</li>
+<li>update software regularly, but try to minimize disruption</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>additional advice (cont)</h3>
+<ul>
+<li>limit execution threads</li>
+<li>change default java options</li>
+<li>put all scripts in the repo so code blocks are not hard coded</li>
+<li>utilitize views</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>advanced topics</h3>
+<ul>
+<li>cli</li>
+<li>api</li>
+<li>automation </li>
+<li>core plugins</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>cli</h3>
+<ul>
+<li>download the cli from <a href="http://localhost:8081/cli">http://localhost:8081/cli</a></li>
+<li>start SSH daemon in configuration that allows you to add a ssh key to a user and authenticate</li>
+<li>you can use the same cli commands</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>api</h3>
+<ul>
+<li>go to just any url and put in /api</li>
+<li>provides restful api in xml, json, python</li>
+<li>can do an optional parameter depth=1 (default is 0) to get more information but takes more bandwidth</li>
+<li>build queue and load statistics have separate api but just just go to <a href"http://localhost:8081/api">http://localhost:8081/api</a> for more details</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>automation</h3>
+<ul>
+<li>look at the demo-jenkins project to see automated installation</li>
+<li>bin/prepare.sh for installation and bin/configure.sh for the plugin and job installation</li>
+<li>utilized the cli</li>
+<li>could use the api to check status of kicked off jobs</li>
+<li>automation with authentication is a bit more tricky</li>
+<li>suggest install plugins, then copy in a global config, restart, then from there use authentication to install jobs</li>
+<li>preserve the identity based files that are located in jenkins home directory</li>
+</ul>
+				</section>
+				<section>
+                                        <h3>core plugins I use</h3>
+                                        <ul>
+                                        <li>git github github-api (should be default)</li>
+                                        <li>ghprb (github pull request builder)</li>
+                                        <li>greenballs (seriously blue balls?)</li>
+                                        <li>postbuild (useful for doing custom blocks based on results)</li>
+                                        <li>dashboard view (show dashboard stats but can use walls if you prefer)</li>
+                                        <li>email-ext (highly customizable email reporter default is plain)</li>
+                                        <li>html publisher (attach any old html generated page)</li>
+                                        <li>these are all installed in the demo along with dependencies</li>
+                                        </ul>
+				</section>
+				<section>
+                                        <h3>plugins you like?</h3>
+				</section>
+                                <section>
+                                        <h3>Questions/Comments</h3>
+                                        <p>
+                                                <small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+                                        </p>
+					<p>
+						<a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+					</p>
+					<p>
+						<a href="http://github.com/lloydbenson/demo-jenkins"><small>http://github.com/lloydbenson/demo-jenkins</small></a>
+					</p>
+                                </section>
+			</div>
+
+		</div>
+
+		<script src="/lib/js/head.min.js"></script>
+		<script src="/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

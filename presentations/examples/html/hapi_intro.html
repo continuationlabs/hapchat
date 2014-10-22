@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>a hapi introduction</title>
+
+		<meta name="description" content="A hapi introduction">
+		<meta name="author" content="Lloyd Benson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="/css/reveal.min.css">
+		<link rel="stylesheet" href="/css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="/lib/css/zenburn.css">
+
+                <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+                <script>
+                        if( window.location.search.match( /print-pdf/gi ) ) {
+                                var link = document.createElement( 'link' );
+                                link.rel = 'stylesheet';
+                                link.type = 'text/css';
+                                link.href = '/css/print/pdf.css';
+                                document.getElementsByTagName( 'head' )[0].appendChild( link );
+                        }
+                </script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>a hapi introduction</h2>
+					<h3>writing node applications with hapi</h3>
+					<p>
+						<small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+					</p>
+					<p>
+						<a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+					</p>
+				</section>
+				<section>
+					<h3>whoami</h3>
+                                        <ul>
+                                        <li>who cares?</li>
+                                        <li>lloyd benson (lloyd.benson@gmail.com)</li>
+                                        <li>@walmartlabs node team (primarily mobile)</li>
+                                        <li>many hats (devops/architect/sysadmin/web developer/gluer of all things)</li>
+                                        <li>the guy that did the black friday node release</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>goals</h3>
+                                        <ul>
+                                        <li>raise awareness</li>
+                                        <li>see if there is further interest</li>
+                                        <li>to give my first ever presentation</li>
+                                        <li>provide a boring non-coding talk to provide as many things as I can cover</li>
+                                        <li>try not to embarrass myself too badly by not being solely a developer</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>What is hapi?</h3>
+					<p> A rich framework for building web applications and services. hapi is a simple to use configuration-centric framework with built-in support for input validation, caching, authentication, and other essential facilities. hapi enables developers to focus on writing reusable application logic instead of spending time building infrastructure. The framework supports a powerful plugin architecture for pain-free and scalable extensibility.
+					</p>
+				</section>
+				<section>
+					<h3>Why use hapi? Why is it different?</h3>
+                                        <ul>
+					<li>larger teams - can work on parts more independently</li>
+					<li>load - need to handle larger loads</li>
+					<li>prefer configuration to middleware code</li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>alternative frameworks</h3>
+                                        <ul>
+					<li>express (koa / kraken)</li>
+					<li>director</li>
+					<li>restify</li>
+                                        <li><a href="http://nodeframework.com">http://nodeframework.com</a></li>
+                                        </ul>
+				</section>
+				<section>
+					<p>hello world</p>
+					<pre><code data-trim contenteditable>
+var Hapi = require('hapi');
+// Create a server with a host and port
+var server = Hapi.createServer('localhost', 8000);
+// Add the route
+server.route({
+    method: 'GET',
+    path: '/hello',
+    handler: function (request, reply) {
+
+        reply('hello world');
+        //reply({"name": "bob"});
+    }
+});
+// Start the server
+server.start();
+					</code></pre>
+				</section>
+				<section>
+					<p>Get all routes</p>
+					<pre><code data-trim contenteditable>
+console.log(server.table());
+					</code></pre>
+				</section>
+				<section>
+					<p>path processing</p>
+                                        <ul>
+                                         <li>The router iterates through the routing table on each incoming request and executes the first (and only the first) matching route.</li>
+                                         <li>Route matching is done on the request path only (excluding the query and other URI components).</li>
+                                         <li>Requests are matches in a deterministic order where the order in which routes are added does not matter.
+                                         <li>The routes are sorted from the most specific to the most generic. See <a href="https://github.com/spumko/hapi/blob/master/docs/Reference.md#path-processing">https://github.com/spumko/hapi/blob/master/docs/Reference.md#path-processing</a>
+                                        </ul>
+				</section>
+				<section>
+					<p>using var for handler</p>
+					<pre><code data-trim contenteditable>
+var handler = function (request, reply) {
+                 reply('hello world');
+              };
+
+server.route({
+    method: 'GET',
+    path: '/hello',
+    handler: handler
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>supports vhost</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/hello',
+    vhost: 'vhost.example.com',
+    handler: handler
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>caching</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/hello',
+    cache: { expiresIn: 5 * 60 * 1000 },
+    handler: handler
+});
+					</code></pre>
+                                        cache policy for headers
+				</section>
+				<section>
+					<p>config</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/hello',
+    config: { 
+          handler: handler,
+          cache: { expiresIn: 5 * 60 * 1000 }
+    }
+});
+					</code></pre>
+                                        <ul>
+                                          <li>handler can be outside or inside of config</li>
+                                          <li>config allows you to keep things in sync so its not in a difference place</li>
+                                          <li>you can reuse config via require if you want</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>validation</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/hello',
+    config: { 
+          handler: handler,
+          validate: {
+             query: {
+                id: Joi.number().min(100).required().xor('username'),
+                username: Joi.string().alphanum().min(3).max(10) 
+             }
+          }
+    }
+});
+					</code></pre>
+                                        You should always be spending time validating your data!
+				</section>
+				<section>
+					<p>additional info</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/hello',
+    config: { 
+          handler: handler,
+          description: "return hello world",
+          tags: [ "tag1", "tag2" ],
+          notes: "some notes here"
+    }
+});
+					</code></pre>
+                                        <ul>
+                                          <li>support 3 additional items description, tags, and notes</li>
+                                          <li>Use the json object and do documention on endpoint (lout plugin)</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>path parameters</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/user/{id}',
+    config: { 
+          handler: function (
+          validate: {
+             path: { 
+                [ id: Joi.number().min(100),
+                      Joi.string().alphanum().min(3).max(10) ]
+             }
+          },
+          description: "obtain user info",
+          tags: [ "user", "account" ],
+          notes: "some notes here"
+    }
+});
+					</code></pre>
+                                        <ul>
+                                          <li>Each path segment (everything between the opening '/' and the closing '/' unless it is the end of the path) can only include one named parameter</li>
+                                          <li>A parameter can cover the entire segment ('/{param}') or part of the segment ('/file.{ext}').</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>optional parameters</p>
+					<pre><code data-trim contenteditable>
+var getAlbum = function (request, reply) {
+
+    reply('You asked for ' +
+          (request.params.song ? request.params.song + ' from ' : '') +
+          request.params.album);
+};
+
+server.route({
+    path: '/{album}/{song?}',
+    method: 'GET',
+    handler: getAlbum
+});
+					</code></pre>
+                                        <ul>
+                                          <li>An optional '?' suffix following the parameter name indicates an optional parameter</li>
+                                          <li>only allowed if the parameter is at the end of the path or only covers part of the segment as in '/a{param?}/b')</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>multiple segments</p>
+					<pre><code data-trim contenteditable>
+var getPerson = function (request, reply) {
+
+    var nameParts = request.params.name.split('/');
+    reply({ first: nameParts[0], last: nameParts[1] });
+};
+
+server.route({
+    path: '/person/{name*2}',   // Matches '/person/john/doe'
+    method: 'GET',
+    handler: getPerson
+});
+					</code></pre>
+                                        <ul>
+                                          <li>multiple segments means greater than 1</li>
+                                          <li>can use * with no number if which will match any number of segments</li>
+                                          <li>if just * than it can only be used in the last path segment</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>more complex function</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/user/{id}',
+    config: { 
+          handler: function (request, reply) {
+
+                 db.get('user',request.params.id, function (err,item) {
+                    if (err) {
+                       return reply(Boom.notFound());
+                    }
+                    reply(item);
+                 );
+          }
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>server.helper</p>
+					<pre><code data-trim contenteditable>
+var user = function (id, callback) {
+   db.get('user',id, function (err,item) {
+      if (err) {
+        return callback(Boom.notFound());
+      }
+      callback(item);
+   });
+};
+
+server.helper("user", user);
+
+server.helpers.user(123, function (result) {
+   // only need result not err and result
+   // it will either return err or a valid result like standard http
+   console.log(result);
+});
+
+					</code></pre>
+                                Can use as an interface between different endpoints but primarily useful for caching
+				</section>
+				<section>
+					<p>server.helper caching</p>
+					<pre><code data-trim contenteditable>
+var user = function (id, callback) {
+   // simplified
+   db.get('user',id, function (err,item) {
+      callback(item);
+   });
+};
+
+server.helper("user", user, {
+   cache: {
+      expiresIn: 60 * 1000,
+      // at 45 try to get a new copy
+      // if you dont get it in 300ms serve up old copy
+      // and when expiresIn hits, serve it up instead
+      staleIn: 45 * 1000,
+      staleTimeout: 300
+   }
+});
+
+					</code></pre>
+                                Has an in-memory cache 100m but you can configure to use redis, mongodb, memcached (and can use multiple)
+				</section>
+				<section>
+					<p>server.helper (continued)</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/user/{id}',
+    config: { 
+          handler: function (request, reply) {
+             server.helpers.user(request.params.id, reply);
+          }
+    }
+});
+
+					</code></pre>
+                                Now we have caching.  Hapi 3.x uses server.method now and helper has been deprecated.
+				</section>
+				<section>
+					<p>route prerequisites</p>
+					<pre><code data-trim contenteditable>
+var pre1 = function (request, reply) { reply('hello'); };
+var pre2 = function (request, reply) { reply('world'); };
+var pre3 = function (request, reply) {
+   reply(request.pre.m1 + ' ' + request.pre.m2);
+};
+</code></pre>
+<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/',
+    config: {
+        pre: [
+            [
+                // m1 and m2 executed in parallel
+                { method: pre1, assign: 'm1' },
+                { method: pre2, assign: 'm2' }
+            ],
+            { method: pre3, assign: 'm3' },
+        ],
+        handler: function (request, reply) {
+            reply(request.pre.m3 + '\n');
+        }
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>route prerequisites (continued)</p>
+                                <ul>
+                                <li>Gather blocking items before you execute business logic (parallel and/or serial)</li>
+                                <li>Simpler than doing nested callbacks</li>
+                                <li>Can be any function (not just helper)</li>
+                                <li>Executes in order</li>
+                                <li>If failures, it will reply back with that, else save state</li>
+                                <li>Not necessarily a true prerequisite, its just a way to break out business logic when order is important
+                                </ul>
+				</section>
+				<section>
+					<p>route prerequisites example</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/profile/{id}',
+    config: {
+        pre: [ 'user(params.id)', 'account(params.id)', 'pref(params.id)' ],
+        handler: function (request, reply) {
+            reply({
+               user: user.pre.user,
+               account: user.pre.account,
+               pref: user.pre.pref
+            });
+        }
+    }
+});
+					</code></pre>
+                                Note: you can use helper functions for short hand implementation
+				</section>
+				<section>
+					<p>serve a file</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/favicon.ico',
+    config: {
+       file: 'favicon.ico'
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>serve a directory</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/images/{file}',
+    //if they request interfacesomething, only something with be used for file
+    //path: '/images/interface{file}',
+    //path: '/images/{file*}', // go deeper
+    //path: '/images/{file*3}', // go 3 deep
+    config: {
+       directory: {
+          path: './public/images',
+          //path: [ './public/images', 'dir2' ] // multipath
+          listing: true
+    }
+});
+					</code></pre>
+                                <ul>
+                                <li>Really useful for static content, because that changes all the time, this abstracts</li>
+                                <li>Can interface something, but utilize a different underlying structure for files</li>
+                                </ul>
+				</section>
+				<section>
+					<p>redirect</p>
+					<pre><code data-trim contenteditable>
+//redirect / to the html dir
+var home = {
+    handler: function (request, reply) {
+        // note you need the reply() interface, rather than our usual reply for redirect
+        reply().redirect('/html');
+    }
+};
+
+var html = { handler: {
+    directory: { listing: true, index: false, path: './html' }
+}};
+// routes
+server.route({ method : 'GET', path : '/', config : home });
+server.route({ method : 'GET', path : '/html/{path*}', config : html });
+					</code></pre>
+				</section>
+
+				<section>
+					<p>proxy</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: '*',
+    path: '/{path*}',
+    config: {
+       handler: {
+          proxy: {
+             host: "google.com",
+             // 6th redirect get a 300 response
+             redirects: 5,
+             // you get entire payload stream but lets add our own tracking cookie
+             postResponse: function(request,reply,res) {
+                reply(res).state('tracker', '1234-1234-1234').ttl(60 * 1000);
+             })
+          }
+       }
+    }
+});
+					</code></pre>
+                                Note: * will match any method, but hapi will do most specific to least specific for matching, hapi will not allow you to have conflicts
+				</section>
+				<section>
+					<p>payload</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'POST',
+    path: '/data',
+    config: {
+       payload: {
+          // defaults
+          output: 'data',
+          parse: true
+       },
+       handler: function (request, reply) {
+          // could be many things, json - object, multiform - object with keys for different fields
+          reply(request.payload);
+       }
+    }
+});
+					</code></pre>
+                                <ul>
+                                <li>First look at (transport encoding) zip or deflate and open it</li>
+                                <li>Next look at the content type</li>
+                                <li>if supported type, parse and give back the buffer as an object</li>
+                                <li>if parse if false, you get the raw buffer</li>
+                                </ul>
+				</section>
+				<section>
+					<p>payload supported parsing types</p>
+                                <ul>
+<li>application/json</li>
+<li>application/x-www-form-urlencoded</li>
+<li>application/octet-stream</li>
+<li>text/*</li>
+<li>multipart/form-data</li>
+<li>if format is unknown it will respond with a 400 (Bad Request)</li>
+                                </ul>
+				</section>
+				<section>
+					<p>form examples</p>
+					<pre><code data-trim contenteditable>
+<form method="post" enctype="multipart/form-data" action="/data">
+Avatar: <input type="file" name="avatar />
+<input type=submit value="upload" />
+</form>
+					</code></pre>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'POST',
+    path: '/data',
+    config: {
+       payload: {
+          output: 'data', // default
+          //output: 'file',
+          //output: 'stream',
+          parse: true // default
+       },
+       handler: function (request, reply) {
+          reply("received: " + request.payload.avatar.length); // data
+          //reply("saved to " + request.payload.avatar.path); // file
+          //request(request.payload.avatar.pipe(require('request').put(url)); // stream
+          //reply("ok"); // stream
+       }
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>parse false</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'POST',
+    path: '/data',
+    config: {
+       payload: {
+          output: 'stream',
+          parse: false // does NOTHING not even transport encoding
+          //parse: gunzip // will open it up provided its appropriately encoded
+       },
+       handler: function (request, reply) {
+          request(request.payload.pipe(Zlib.createGunzip())
+                                 .pipe(fs.createWriteStream('./upload');
+          //reply("ok"); // stream
+       }
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>binding</p>
+					<pre><code data-trim contenteditable>
+var Responder = function (message) { this.message = message; };
+Reponder.prototype.handler = function (request, reply) {
+   reply(this.message);
+};
+var responder = new Responder('hello');
+
+server.route({
+    method: 'GET',
+    path: '/message',
+    config: {                           
+      handler: 
+          responder.handler  // wont work, its unbound so you get undef
+          //Responder.prototype.handler.bind(responder) // works but is ugly
+          //bind: responder
+    }
+});
+					</code></pre>
+				</section>
+				<section>
+					<p>hold</p>
+					<pre><code data-trim contenteditable>
+var handler = function (request, reply) {
+   //wont work as expected because reply immediately calls next
+   //we could move this inside, but if you have complex rules hold may be preferable
+   var response = reply('hello');
+   //var response = reply('hello').hold;  // wont work as expected because reply immediately calls next
+   id.generate(request, function (id) {
+      response('tracker', id);
+      //response('tracker', id).send; // must call send after hold
+   });
+};
+					</code></pre>
+				</section>
+				<section>
+					<p>web support</p>
+                                        <ul>
+                                         <li>views</li>
+					 <li>cookies</li>
+					 <li>jsonp</li>
+                                        </ul>
+				</section>
+				<section>
+					<p>views</p>
+					<pre><code data-trim contenteditable>
+// home.html
+&lt;html&gt;
+&lt;body&gt;<p>{{message}}</p>&lt;/body&gt;
+&lt;/html&gt;
+					</code></pre>
+					<pre><code data-trim contenteditable>
+server.views({
+   engines: {
+      // html is the extension
+      // can do multiple engines at the same time
+      html: 'handlebars',
+      jade: 'jade'
+   },
+   path: './templates'
+});
+
+var handler = function (request, reply) {
+  reply.view("home", {message: "hello " + request.params.name});
+};
+					</code></pre>
+				</section>
+				<section>
+					<p>view shortcut</p>
+					<pre><code data-trim contenteditable>
+// home.html
+&lt;html&gt;
+&lt;body&gt;<p>hello {{params.name}}</p>&lt;/body&gt;
+&lt;/html&gt;
+					</code></pre>
+					<pre><code data-trim contenteditable>
+server.views({
+   engines: {
+      // html is the extension
+      html: 'handlebars'
+   },
+   path: './templates'
+});
+
+var handler = function (request, reply) {
+  view: "home";
+};
+					</code></pre>
+Can use query, params and payload for context
+				</section>
+				<section>
+					<p>cookie state</p>
+					<pre><code data-trim contenteditable>
+//manage state for this cookie and not have to keep redefining ttl
+server.state('visitor', {
+  ttl: 24 * 60 * 60 * 1000,
+  encoding: 'base64',
+  //encoding: 'base64json' // json-stringified than encoded
+  // if you dont have the cookie, set the cookie cookie value in this case is repeat true
+  autoValue: { repeat: true }
+});
+var handler = function (request, reply) {
+  //reply.view("home"); //uninteresting
+  reply.view("home");
+  //reply.view("home");
+       //.state('visitor',  { ttl: 24 * 60 * 60 * 1000 };
+       //.state('visitor');
+       //.state('visitor', {autoValue: {repeat: true}});
+};
+					</code></pre>
+				</section>
+				<section>
+					<p>jsonp</p>
+					<pre><code data-trim contenteditable>
+server.route({
+    method: 'GET',
+    path: '/user',
+    config: {                           
+      // looks for parameter called callback and wraps
+      jsonp: 'callback',
+      handler: function (request, reply) {
+         reply({name: "lloyd" });
+      }
+    }
+});
+					</code></pre>
+For example, if the value is 'callback', a request comes in with 'callback=me', and the JSON response is '{ "a":"b" }', the payload will be: 'me({ "a":"b" });'. Does not work with stream responses.
+				</section>
+                                <section>
+                                        <p>advanced topics</p>
+                                        <ul>
+                                         <li>plugins</li>
+                                         <li>authentication</li>
+                                         <li>extensibility</li>
+                                         <li>ops</li>
+                                         <li>server.inject()</li>
+                                         <li>other plugins</li>
+                                        </ul>
+                                </section>
+                                <section>
+                                        <p>plugins</p>
+                                        <ul>
+                                         <li>manage your endpoints in smaller components</li>
+                                         <li>manage your endpoints independently of other modules</li>
+                                         <li>although plugins can be shared (like an exchange) its primary goal is to help you with your architecture</li>
+                                        </ul>
+                                </section>
+                                <section>
+                                        <p>authentication</p>
+                                        <ul>
+                                         <li>hapi-auth-basic</li>
+                                         <li>hapi-auth-cookie</li>
+                                         <li>hapi-auth-hawk</li>
+                                         <li>custom / more to come?</li>
+                                        </ul>
+                                </section>
+                                <section>
+                                        <p>extensibility</p>
+                                        <ul>
+                                         <li>You can use an optional extention in the request lifecycle</li>
+                                         <li>onRequest, onPreAuth, onPostAuth, onPreHandler, onPostHandler, onPreResponse</li>
+                                         <li>onRequest, onPreResponse only ones guaranteed because others may fail before</li>
+                                        </ul>
+                                </section>
+                                <section>
+                                        <p>ops</p>
+                                        <ul>
+                                         <li>cors</li>
+                                         <li>logging</li>
+                                         <li>load</li>
+                                         <li>payload size</li>
+                                         <li>timeout</li>
+                                        </ul>
+                                </section>
+                                <section>
+                                        <p>other cool stuff</p>
+                                        <ul>
+                                         <li>server.inject()</li>
+                                         <li>confidence</li>
+                                         <li>good</li>
+                                         <li>joi</li>
+                                        </ul>
+                                </section>
+				<section>
+					<h3>Want a better presentation of all hapi features?</h3>
+                                        <ul>
+                                        <li>Eran Hammer can explain at a deeper level</li>
+                                        <li>Much of this presentation came from this talk and covers more advanced topics and may provide better explanations</li>
+                                        <li><a href="http://vimeo.com/85799484">http://vimeo.com/85799484</a></li>
+                                        </ul>
+				</section>
+				<section>
+					<h3>Need help?</h3>
+                                        <ul>
+                                        <li><a href="https://github.com/spumko/hapi/blob/master/docs/Reference.md">https://github.com/spumko/hapi/blob/master/docs/Reference.md</a></li>
+                                        <li>lloyd.benson@gmail.com</li>
+                                        <li>#hapi in irc.freenode.net</li>
+                                        <li>submit issue / PR (<a href="https://github.com/spumko/hapi/blob/master/docs/Style.md">Style Guide</a>)</li>
+                                        <li><a href="https://github.com/spumko">https://github.com/spumko</a></li>
+                                        <li>node school content <a href="https://github.com/spumko/makemehapi">https://github.com/spumko/makemehapi</a> being finished</li>
+                                        </ul>
+				</section>
+                                <section>
+                                        <h3>Questions/Comments</h3>
+                                        <p>
+                                                <small>Created by Lloyd Benson / lloyd.benson@gmail.com</small>
+                                                <small>with many borrowed elements from talks / documentation</small>
+                                        </p>
+					<p>
+						<a href="http://github.com/lloydbenson/presentations"><small>http://github.com/lloydbenson/presentations</small></a>
+					</p>
+                                </section>
+			</div>
+
+		</div>
+
+		<script src="/lib/js/head.min.js"></script>
+		<script src="/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
