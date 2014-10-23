@@ -1,20 +1,46 @@
+var Path = require('path');
+
 // Load modules
 
 module.exports = {};
 
 
-module.exports.home = function (request, reply) {
+module.exports.home = {
+    description: 'Home page view for hapchat',
+    auth: {
+        mode: 'try'
+    },
+    handler: function (request, reply) {
 
-    reply.view('index');
+        reply.view('index');
+    }
 };
 
 
 module.exports.uploadView = {
+    description: 'View: upload pictures',
     handler: function (request, reply) {
 
         reply.view('upload');
     }
 };
+
+module.exports.stat = function (server) {
+
+    return {
+        description: 'Static assets for hapchat',
+        auth: false,
+        handler: {
+            directory: {
+                path: Path.join(server.settings.app.root, 'static'),
+                index: false
+            }
+        },
+        cache: {
+            expiresIn: server.settings.app.oneDay * 10
+        }
+    }
+}
 
 
 module.exports.login = require('./login');

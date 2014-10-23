@@ -17,57 +17,13 @@ module.exports = {
 module.exports.registerRoutes = function registerRoutes(server) {
 
     server.route([
-        {
-            method: 'GET',
-            path: '/',
-            config: {
-                auth: {
-                    mode: 'try'
-                },
-                handler: Handlers.home
-            }
-        },
-        {
-            method: 'GET',
-            path: '/upload',
-            config: Handlers.uploadView
-        },
-        {
-            method: 'POST',
-            path: '/upload',
-            config: Handlers.upload
-        },
-        {
-            method: 'GET',
-            path: '/photos',
-            config: Handlers.photos
-        },
-        {
-            method: 'GET',
-            path: '/photos/{photoId}',
-            config: Handlers.photo
-        },
-        {
-            method: 'GET',
-            path: '/login',
-            config: Handlers.login
-        },
-        {
-            method: 'GET',
-            path: '/static/{path*}',
-            config: {
-                auth: false,
-                handler: {
-                    directory: {
-                        path: Path.join(server.settings.app.root, 'static'),
-                        index: false
-                    }
-                },
-                cache: {
-                    expiresIn: server.settings.app.oneDay * 10
-                }
-            }
-        }
+        { method: 'GET', path: '/', config: Handlers.home },
+        { method: 'GET', path: '/upload', config: Handlers.uploadView },
+        { method: 'POST', path: '/upload', config: Handlers.upload },
+        { method: 'GET', path: '/photos', config: Handlers.photos },
+        { method: 'GET', path: '/photos/{photoId}', config: Handlers.photo },
+        { method: 'GET', path: '/login', config: Handlers.login },
+        { method: 'GET', path: '/static/{path*}', config: Handlers.stat(server) }
     ]);
 };
 
