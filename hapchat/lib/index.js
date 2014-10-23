@@ -144,7 +144,7 @@ module.exports.registerStrategies = function (server) {
         provider: 'github',
         password: 'cookie_encryption_password',
         clientId: 'd40df1c0836ce9f1ca10',
-        clientSecret: '1916660d600d84974d27911b1fe7983c7946cd8b',
+        clientSecret: '427bc4fc869b17baf53c885f1826821c7f66244b',
         isSecure: false
     });
 
