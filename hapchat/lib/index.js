@@ -32,26 +32,18 @@ module.exports.registerMethods = function registerMethods(server) {
 
     server.method('getNav', function (authenticated, next) {
 
-        var links = [{
-            name: 'Home',
-            path: '/'
-        }];
+        var links = [{ name: 'Home', path: '/' }];
 
         if (authenticated) {
-            links.push({
-                name: 'Upload',
-                path: '/upload'
-            },
-            {
-                name: 'Photos',
-                path: '/photos'
-            });
+            links.push(
+                { name: 'Upload', path: '/upload' },
+                { name: 'Photos', path: '/photos' }
+            );
         }
         else {
-            links.push({
-                name: 'Login',
-                path: '/login'
-            });
+            links.push(
+                { name: 'Login', path: '/login' }
+            );
         }
 
         next(null, links, 0);
@@ -60,17 +52,6 @@ module.exports.registerMethods = function registerMethods(server) {
 
 
 module.exports.initPaths = function initPaths(root) {
-
-    try {
-        var dataDir = Path.join(root, 'data');
-
-        Fs.mkdirSync(dataDir);
-    }
-    catch (err) {
-        if (err.code !== 'EEXIST') {
-            throw err;
-        }
-    }
 
     try {
         var photosDir = Path.join(root, 'static', 'photos');
