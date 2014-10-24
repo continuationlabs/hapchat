@@ -6,7 +6,7 @@
 var internals = {};
 
 
-module.exports = {
+module.exports.login = {
     auth: 'github',
     handler: function (request, reply) {
 
@@ -14,6 +14,16 @@ module.exports = {
             request.auth.session.set(request.auth.credentials);
         }
 
+        return reply.redirect('/');
+    }
+};
+
+
+module.exports.logout = {
+    handler: function (request, reply) {
+
+        request.auth.session.clear();
+        
         return reply.redirect('/');
     }
 };

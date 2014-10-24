@@ -24,7 +24,7 @@
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
                     {{#each nav}}
-                    <li><a href="{{path}}">{{name}}</a></li>
+                    <li><a href="{{path}}">{{#if icon}}<img src="{{icon}}" class="icon" /> {{/if}}{{name}}</a></li>
                     {{/each}}
                 </ul>
             </div>

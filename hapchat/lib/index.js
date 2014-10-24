@@ -25,6 +25,7 @@ module.exports.registerRoutes = function registerRoutes(server) {
         { method: 'GET', path: '/photos', config: Handlers.photos },
         { method: 'GET', path: '/photos/{photoId}', config: Handlers.photo },
         { method: 'GET', path: '/login', config: Handlers.login },
+        { method: 'GET', path: '/logout', config: Handlers.logout },
         { method: 'GET', path: '/static/{path*}', config: Handlers.stat(server) }
     ]);
 };
@@ -39,12 +40,13 @@ module.exports.registerMethods = function registerMethods(server) {
         if (authenticated) {
             links.push(
                 { name: 'Upload', path: '/upload' },
-                { name: 'Photos', path: '/photos' }
+                { name: 'Photos', path: '/photos' },
+                { name: 'Logout', path: '/logout' }
             );
         }
         else {
             links.push(
-                { name: 'Login', path: '/login' }
+                { name: 'Login With Github', path: '/login', icon: '/static/images/GitHub-Mark-32px.png' }
             );
         }
 

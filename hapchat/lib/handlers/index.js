@@ -1,7 +1,7 @@
 // Load modules
 
 var Path = require('path');
-
+var Auth = require('./auth');
 
 // Declare internals
 
@@ -31,6 +31,7 @@ module.exports.uploadView = {
     }
 };
 
+
 module.exports.stat = function (server) {
 
     return {
@@ -49,7 +50,10 @@ module.exports.stat = function (server) {
 }
 
 
-module.exports.login = require('./login');
+module.exports.login = Auth.login;
+
+
+module.exports.logout = Auth.logout;
 
 
 module.exports.photos = require('./photos');

@@ -133,15 +133,18 @@
         var socketPath = window.location.origin.replace('http', 'ws');
         var socket = new WebSocket(socketPath);
         var imagesPath = window.location.origin + '/static/photos/';
+        var photosPage = window.location.origin + '/photos/';
         var feed = $('#feed');
 
         var processPhoto = function (msg) {
 
             var imagePath = imagesPath + msg.data + '.png';
-            var container = $('<div></div>').addClass('photoContainer');
-            var image = $('<img />').attr('src', imagePath).attr('alt','');
+            var photoPage = photosPage + msg.data;
+            var container = $('<div></div>').addClass('photo-container col-md-6 col-sm-12');
+            var anchor = $('<a></a>').attr('href', photoPage);
+            var image = $('<img />').attr('src', imagePath).attr('alt','').addClass('hapchat-photo');
 
-            feed.prepend(container.append(image));
+            feed.prepend(anchor.append(container.append(image)));
         };
 
         socket.onmessage = processPhoto;
@@ -154,7 +157,7 @@
         if (path === '/upload') {
             photoCapture();
         }
-        if (path === '/feed') {
+        if (path === '/photos') {
             createSocket();
         }
     });
