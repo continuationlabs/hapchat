@@ -20,3 +20,7 @@ footer p {
 .message-hide {
     display: none;
 }
+
+.icon {
+    height: 20px;
+}
