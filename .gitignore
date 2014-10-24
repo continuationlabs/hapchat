@@ -18,3 +18,4 @@ lib-cov
 complexity.md
 *.db
 hapchat/static/photos/*.*
+presentations/empirenode2014/html/index.html

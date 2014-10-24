@@ -4,11 +4,15 @@
   "description": "presentations",
   "main": "index.js",
   "engines": {
-     "node": "0.10.*"
+    "node": "0.10.*"
   },
   "dependencies": {
+    "async": "0.9.x",
+    "cheerio": "0.17.x",
     "hapi": "6.x.x",
     "reveal.js": "*"
   },
-  "author": "Lloyd Benson"
+  "scripts": {
+    "start": "node bin/build && node index.js"
+  }
 }
