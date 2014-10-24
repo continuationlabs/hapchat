@@ -50,7 +50,7 @@
 
         var handleVideo = function (stream) {
 
-            // if found attach feed to video element
+            // If found attach feed to video element
             video.src = window.URL.createObjectURL(stream);
         };
 
@@ -62,14 +62,14 @@
         // http://www.purplesquirrels.com.au/2013/08/webcam-to-canvas-or-data-uri-with-html5-and-javascript/
         if (navigator.getUserMedia) {
 
-            // get webcam feed if available
+            // Get webcam feed if available
             navigator.getUserMedia({ video: true }, handleVideo, videoError);
         }
 
         var capture = function () {
 
             if (video.paused || video.ended) {
-                // if no video, exit here
+                // If no video, exit here
                 return false;
             }
 
@@ -109,11 +109,11 @@
             });
         });
 
-        // for iOS
+        // For iOS
         $fileSelect.on('change', function () {
 
             var fileReader = new FileReader();
-            // get selected file (camera capture)
+            // Get selected file (camera capture)
             var files = $fileSelect.get(0).files;
             var file = files[0];
 
@@ -123,7 +123,7 @@
                 $previewImage.attr('src', fileReader.result);
             };
 
-            // get captured image as data URI
+            // Get captured image as data URI
             fileReader.readAsDataURL(file);
         });
     };

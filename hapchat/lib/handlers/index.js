@@ -1,6 +1,12 @@
+// Load modules
+
 var Path = require('path');
 
-// Load modules
+
+// Declare internals
+
+var internals = {};
+
 
 module.exports = {};
 

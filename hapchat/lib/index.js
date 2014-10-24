@@ -7,6 +7,8 @@ var Handlers = require('./handlers');
 
 // Declare internals
 
+var internals = {};
+
 
 module.exports = {
     sockets: require('./sockets'),
@@ -66,7 +68,7 @@ module.exports.initPaths = function initPaths(root) {
 };
 
 
-module.exports.registerStrategies = function (server) {
+module.exports.registerStrategies = function registerStrategies(server) {
 
     // Set session
     server.auth.strategy('session', 'cookie', {

@@ -1,11 +1,13 @@
 // Load modules
-var Boom = require('boom');
+
 var Fs = require('fs');
 var Path = require('path');
 var Async = require('async');
+var Boom = require('boom');
 
 
 // Declare internals
+
 var internals = {
     maxAge: 1000 * 60 * 60 * 24 * 5,  // 5 days
     path: Path.join(__dirname, '..', '..', 'static', 'photos')
@@ -17,43 +19,40 @@ module.exports = {
 
         var getFiles = function (next) {
 
-            Fs.readdir(internals.path, next)
+            Fs.readdir(internals.path, next);
         };
 
         var getStats = function (files, next) {
 
-            var filestats = [];
-
             var addStats = function (file, next) {
 
                 var filePath = Path.join(internals.path, file);
+
                 Fs.stat(filePath, function (err, stats) {
 
+                    if (err) {
+                        return next(err);
+                    }
+
                     var fileparts = file.split('.');
-                    var extension = fileparts[0].toLowerCase();
-                    var id = fileparts[1];
-
-                    filestats.push({
+                    var result = {
                         id: fileparts[0],
-                        extension: fileparts[1],
+                        extension: fileparts[1].toLowerCase(),
                         timestamp: stats.ctime.getTime()
-                    });
+                    };
 
-                    next(err);
+                    next(null, result);
                 });
             };
 
-            Async.each(files, addStats, function (err) {
-
-                next(err, filestats);
-            });
+            Async.map(files, addStats, next);
         };
 
         var sortFiles = function (files, next) {
 
             files.sort(function (a, b) {
 
-                return (a.timestamp < b.timestamp);
+                return a.timestamp - b.timestamp;
             });
 
             next(null, files);
@@ -68,6 +67,7 @@ module.exports = {
 
             for (var i = 0, il = files.length; i < il; ++i) {
                 var file = files[i];
+
                 if (file.timestamp > maxage && file.extension === 'png') {
                     displayFiles.push(file);
                 }
