@@ -1,10 +1,13 @@
 // Load modules
+
 var Fs = require('fs');
 var Joi = require('joi');
 
 
 // Declare internals
+
 var internals = {};
+
 
 module.exports = {
     handler: function (request, reply) {
@@ -19,7 +22,7 @@ module.exports = {
     },
     validate: {
         params: {
-            photoId: Joi.string().regex(/([\w\d]+-){4}[\w\d]+/)
+            photoId: Joi.string().guid()
         }
     }
 };

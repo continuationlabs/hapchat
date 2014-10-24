@@ -1,7 +1,7 @@
 // Load modules
 
-var Ws = require('ws');
 var Uuid = require('node-uuid')
+var Ws = require('ws');
 
 
 // Declare internals
@@ -16,6 +16,7 @@ module.exports.init = function (server) {
     ws.broadcast = function (data) {
 
         var keys = Object.keys(this.clients);
+
         for (var i = 0, il = keys.length; i < il; ++i) {
             var key = keys[i];
             var socket = this.clients[i];

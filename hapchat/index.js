@@ -1,10 +1,10 @@
 // Load modules
-var Bell = require('bell');
-var HapiAuthCookie = require('hapi-auth-cookie');
 var Path = require('path');
+var Bell = require('bell');
 var Hapi = require('hapi');
-var Lib = require('./lib');
+var HapiAuthCookie = require('hapi-auth-cookie');
 var Hoek = require('hoek');
+var Lib = require('./lib');
 var Package = require('./package.json');
 
 
@@ -13,6 +13,7 @@ var Package = require('./package.json');
 var internals = {
     port: process.env.PORT || 8000
 };
+
 
 // Create required directories before anything else is done
 Lib.initPaths(__dirname);
@@ -72,7 +73,6 @@ server.pack.register([
 
     // Register routes
     Lib.registerRoutes(server);
-
 
     // Start the server
     server.start(function start() {

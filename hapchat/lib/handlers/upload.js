@@ -1,11 +1,12 @@
 // Load modules
 
-var Async = require('async');
-var Uuid = require('node-uuid');
-var Path = require('path');
-var Hoek = require('hoek');
-var Boom = require('boom');
 var Fs = require('fs');
+var Path = require('path');
+var Async = require('async');
+var Boom = require('boom');
+var Hoek = require('hoek');
+var Uuid = require('node-uuid');
+
 
 // Declare internals
 
@@ -16,18 +17,20 @@ module.exports = {
     handler: function (request, reply) {
 
         var photoId = Uuid.v4();
+
         var writeToFile = function (next) {
 
-            var path = Path.join(request.server.settings.app.root, 'static','photos', photoId + '.png');
+            var path = Path.join(request.server.settings.app.root, 'static', 'photos', photoId + '.png');
             var image = request.payload.image.replace(/^data:image\/png;base64,/, '');
 
             Fs.writeFile(path, image, { encoding: 'base64' }, next);
         };
 
-        // broadcast photo information
+        // Broadcast photo information
         var broadcastInformation = function (next) {
 
             var ws = request.server.app.ws;
+
             ws.broadcast(photoId);
 
             return next(null);

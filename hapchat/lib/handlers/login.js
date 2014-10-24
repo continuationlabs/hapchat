@@ -1,7 +1,7 @@
 // Load modules
 
 
-// Set Internals
+// Declare internals
 
 var internals = {};
 
