@@ -9,7 +9,6 @@ var internals = {
 console.info('Building slide deck...');
 var gettemplate = function (callback) {
 
-    var data = {};
     Fs.readFile(Path.join(internals.path, 'bin', 'template.html'), {
         encoding: 'utf-8'
     }, function (err, result) {
@@ -18,12 +17,11 @@ var gettemplate = function (callback) {
             return callback(err);
         }
 
-        data.template = Cheerio.load(result);
-        callback(null, data);
+        callback(null, Cheerio.load(result));
     });
 };
 
-var buildSlides = function (data, callback) {
+var buildSlides = function (body, callback) {
 
     Fs.readdir(Path.join(internals.path, 'html'), function (err, files) {
 
@@ -41,7 +39,7 @@ var buildSlides = function (data, callback) {
 
                 var $ = Cheerio.load(result);
 
-                data.template('#deck').append($('div.slides>section'));
+                body('#deck').append($('div.slides>section'));
                 next();
 
             });
@@ -51,14 +49,14 @@ var buildSlides = function (data, callback) {
                 return callback(err);
             }
 
-            callback(null, data);
+            callback(null, body);
         });
     });
 };
 
-var writeFile = function (data, next) {
+var writeFile = function (body, next) {
 
-    Fs.writeFile(Path.join(internals.path, 'html','index.html'), data.template('html'), next);
+    Fs.writeFile(Path.join(internals.path, 'html','index.html'), body('html'), next);
 };
 
 Async.waterfall([gettemplate, buildSlides, writeFile], function (err) {
