@@ -60,18 +60,20 @@ var logout = function (request, reply) {
 };
 
 // Create server
-var server = new Hapi.Server(8187);
+var server = new Hapi.Server(8188);
 
 // Load plugins
 server.pack.register(AuthCookie, function (err) {
 
     // Configure auth scheme
-    server.auth.strategy('YourCookieAuth', 'cookie', {
+    var authOptions = {
         password: 'PasswordUsedToEncryptCookie',
         cookie: 'NameOfCookie',
         redirectTo: '/login',
         isSecure: false
-    });
+    };
+
+    server.auth.strategy('YourCookieAuth', 'cookie', authOptions);
 
     // Configure routes after plugins are loaded
     server.route({

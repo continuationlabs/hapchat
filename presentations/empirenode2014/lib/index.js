@@ -1,7 +1,7 @@
 var Hapi = require('hapi');
 
 //create server
-var server = Hapi.createServer('localhost',8080, { cors: true });
+var server = Hapi.createServer(8080, { cors: true });
 
 //redirect / to the html dir
 var home = {
