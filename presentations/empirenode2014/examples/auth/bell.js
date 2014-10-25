@@ -18,7 +18,9 @@ var privateHandler = function (request, reply) {
 var login = function (request, reply) {
 
     if (request.auth.isAuthenticated) {
-        request.auth.session.set({ name: request.auth.credentials.profile.displayName });
+        request.auth.session.set({
+            name: request.auth.credentials.profile.displayName
+        });
         return reply('Logged in...');
     }
 
@@ -32,27 +34,31 @@ var logout = function (request, reply) {
 }
 
 // Create server
-var server = new Hapi.Server(8187);
+var server = new Hapi.Server(8189);
 
 // Load plugins
 server.pack.register([AuthCookie, Bell], function (err) {
 
     // Configure cookie auth scheme
-    server.auth.strategy('YourCookieAuth', 'cookie', {
+    var authCookieOptions = {
         password: 'PasswordUsedToEncryptCookie',
         cookie: 'NameOfCookie',
         redirectTo: '/login',
         isSecure: false
-    });
+    };
+
+    server.auth.strategy('YourCookieAuth', 'cookie', authCookieOptions);
 
     // Configure third party auth scheme
-    server.auth.strategy('YourThirdPartyAuth', 'bell', {
+    var bellAuthOptions = {
         provider: 'github',
         password: 'PasswordUsedToEncryptThirdPartyAuthCookie',
         clientId: 'd40df1c0836ce9f1ca10',//'YourAppId',
         clientSecret: '427bc4fc869b17baf53c885f1826821c7f66244b',//'YourAppSecret',
         isSecure: false
-    });
+    };
+    
+    server.auth.strategy('YourThirdPartyAuth', 'bell', bellAuthOptions);
 
     // Configure routes after plugins are loaded
     server.route({

@@ -38,7 +38,10 @@ var server = new Hapi.Server(8187);
 server.pack.register(Basic, function (err) {
 
     // Configure auth scheme
-    server.auth.strategy('YourSimpleAuth', 'basic', { validateFunc: validate });
+    var authOptions = {
+        validateFunc: validate
+    };
+    server.auth.strategy('YourSimpleAuth', 'basic', authOptions);
 
     // Configure routes after plugins are loaded
     server.route({
@@ -51,16 +54,6 @@ server.pack.register(Basic, function (err) {
     server.route({
         method: 'GET',
         path: '/private',
-        handler: privateHandler,
-        config: {
-            auth: 'YourSimpleAuth'
-        }
-    });
-
-    // Another protected route
-    server.route({
-        method: 'GET',
-        path: '/superprivate',
         handler: privateHandler,
         config: {
             auth: 'YourSimpleAuth'

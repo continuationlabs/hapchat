@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html class="decks show " data-account="free">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"beacon-5.newrelic.com","errorBeacon":"bam.nr-data.net","licenseKey":"4fd2e9786b","applicationID":"1563900","transactionName":"cApZREQKWl9XFxZQVlAORB9FDVlE","queueTime":0,"applicationTime":313,"ttGuid":"","agentToken":null,"agent":"js-agent.newrelic.com/nr-476.min.js"}</script>
+
+    <title>hapchat intro by Jeffrey White</title>
+    <meta name="description" content="introducing hapchat" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta property="og:title" content="hapchat intro by Jeffrey White" />
+    <meta property="og:site_name" content="Slides" />
+    <meta property="og:image" content="https://s3.amazonaws.com/media-p.slid.es/thumbnails/jeffreywhite/098d0a/hapchat-intro.jpg" />
+    <meta property="og:type" content="presentation" />
+    <meta property="og:url" content="http://slides.com/jeffreywhite/hapchat-intro" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+      <link href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600,700&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic" rel="stylesheet" type="text/css">
+
+    <link href="//slides.com/assets/slides/slides-6679eab2201ca837634c1840f1cd3887.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="//slides.com/assets/application-10eab5aa6a75ba8864a377fee59c5141.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="//slides.com/assets/modernizr-811daed07a17f831d04c27f90dcf22dd.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+<meta content="abdP4AsAyzuWE1YPV7VUHumzYUg3nnviJsPowc4VcWQ=" name="csrf-token" />
+
+
+	<link href="//slides.com/assets/deck-v2-c50e37a56f7b7a09ac56ec616829b248.css" media="all" rel="stylesheet" type="text/css" />
+
+
+<style id="user-css-output" type="text/css"></style>
+
+  </head>
+  <body>
+    <div id="container" class="container">
+
+
+      <div id="main" class="main" role="main">
+
+
+
+
+<div class="marquee loading">
+
+	<div class="reveal-frame">
+		<div class="reveal-viewport theme-font-montserrat theme-color-white-blue">
+			<div class="reveal">
+				<div class="slides">
+					<section data-background-image="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/758786/hapchat.png" data-background-size="initial"><div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 173px; height: auto;" data-block-id="19721408d514c47edf225538cc22b769"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11;">
+<h1>HapChat</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 640px; left: 176px; top: 443px;" data-block-id="f817d00a66d1def2b929763469eed121"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p>building a familiar web experience using the hapi http server platform</p>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 403px; left: 29px; top: 70px; height: auto;" data-block-id="694ad535a334610f0750aa0f766dcb29"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left; z-index: 10; color: rgb(102, 102, 102);" data-placeholder-text="Text">
+<p>Ben Acker</p>
+
+<p>Jeffrey White</p>
+
+<p>Kevin Stevens</p>
+
+<p>Adam Bretz</p>
+
+<p>Colin Ihrig</p>
+
+<p>James Weston</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 403px; left: 477px; top: 70px; height: auto;" data-block-id="8c9b3a5aa7356f7a3ef638353471f84c"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left; z-index: 13;" data-placeholder-text="Text">
+<p>pre-intro</p>
+
+<p>intro</p>
+
+<p>routes</p>
+
+<p>views</p>
+
+<p>plugins</p>
+
+<p>auth</p>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 58px; height: auto;" data-block-id="6a8bf8eb4457377cd47dec4093198781"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="text-align: left; z-index: 10;">
+<h2>what's hapi?</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 132px; height: auto;" data-block-id="05e1ff1d808f37899a77a25af40d9395"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec metus justo. Aliquam erat volutpat." style="z-index: 12; text-align: left;" data-fragment-index="0">
+<p>it's an http framework for node.js, you crazy!</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 905px; height: 629.6760563380282px; left: 0px; top: 70px;" data-block-id="6e9bd2568df7f51b2a403f7d96933861"><div class="sl-block-content" style="opacity: 0.11; z-index: 11;"><img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/758888/hapi.png" style="visibility: visible;" data-natural-width="355" data-natural-height="247"></div></div>
+<div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 233px; height: auto;" data-block-id="0e794b8272a7f6aa754a485e9143d652"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="text-align: left; z-index: 14;" data-fragment-index="1">
+<h2>huh?</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 307px; height: auto;" data-block-id="d32093019f9ee06e09fd53b90181768e"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec metus justo. Aliquam erat volutpat." style="z-index: 15; text-align: left;" data-fragment-index="2">
+<p>you know how we keep having to build "web servers" and "RESTful services"? hapi makes that really easy, so you can focus on your business logic instead of http bullcrap.</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 560px; height: auto;" data-block-id="8ee0363ef97401df33c28b5d3110428e"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="text-align: left; z-index: 16;" data-fragment-index="3">
+<h2>sounds neat!</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 430px; left: 530px; top: 630px; height: auto;" data-block-id="b56049be492f7548b0279662cff5b008"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec metus justo. Aliquam erat volutpat." style="z-index: 17; text-align: left;" data-fragment-index="4">
+<p>word.</p>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 189px; height: auto;" data-block-id="c04cad222c7e5b7a41ae5d855e56c97d"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;" data-fragment-index="0">
+<h2>there's like tons of stuff all over the place to help you learn about hapi</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 47px; top: 92px;" data-block-id="67ff9b41b968cdee9250b0af15fdb8b0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; opacity: 0.16;">
+<h1>you guys,</h1>
+</div></div></section><section class="stack"><section><div class="sl-block" data-block-type="text" style="width: 800px; left: 79px; top: 50px; height: auto;" data-block-id="84c5da5f5f5c507bcc244756f8722351"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text">
+<h2>http://hapijs.com</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 700px; height: 451.5267175572519px; left: 129px; top: 155.5px;" data-block-id="14ff85db8f24d36ccd3bf35854ce88a8"><div class="sl-block-content" style="border: 1px solid rgb(204, 204, 204);"><img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759073/hapiweb.jpg" style="visibility: visible;" data-natural-width="1048" data-natural-height="676"></div></div></section><section>
+    <div class="sl-block" data-block-type="text" style="width: 800px; left: 79px; top: 50px; height: auto;" data-block-id="7a38d601399c81e4d5fecf1792d13476">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text">
+<h2>http://hapijs.com/tutorials</h2>
+</div>
+        </div>
+        <div class="sl-block" data-block-type="image" style="width: 700px; height: 560.4007633587787px; left: 123px; top: 124px;" data-block-id="04b83e35aef304a787fd9baf36c5b147">
+            <div class="sl-block-content" style="border: 1px solid rgb(204, 204, 204);">
+                <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759089/hapitut.jpg" style="visibility: visible;" data-natural-width="1048" data-natural-height="839">
+            </div>
+        </div>
+    </section><section>
+    <div class="sl-block" data-block-type="text" style="width: 800px; left: 79px; top: 50px; height: auto;" data-block-id="4fb300d322c0657fcbb0e3ed10a72016">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text">
+<h2>http://hapijs.com/api</h2>
+</div>
+        </div>
+        <div class="sl-block" data-block-type="image" style="width: 700px; height: 580px; left: 130px; top: 120px;" data-block-id="44c49e7208e9aa4e6f5f82db5301c8aa">
+            <div class="sl-block-content" style="border: 1px solid rgb(204, 204, 204);">
+                <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759096/hapiapi.jpg" style="visibility: visible;" data-natural-width="1050" data-natural-height="870">
+            </div>
+        </div>
+    </section><section>
+    <div class="sl-block" data-block-type="text" style="width: 800px; left: 79px; top: 50px; height: auto;" data-block-id="436c1124e77f25ae0316957514bec0ba">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
+<h2>workshopper</h2>
+</div>
+        </div>
+        <div class="sl-block" data-block-type="image" style="width: 509px; height: 396.73457943925234px; left: 225px; top: 233px;" data-block-id="18ae7a46a2c1f09d28ae5aede12cf734">
+            <div class="sl-block-content" style="border-width: 1px; border-color: rgb(204, 204, 204); z-index: 12;">
+                <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759191/hapiworkshopper.jpg" style="visibility: visible;" data-natural-width="535" data-natural-height="417">
+            </div>
+        </div>
+    <div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 174px; height: auto;" data-block-id="c7db2ead317e0aaee883ad7341847957">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 13;">
+<pre style="text-align: center;">npm install -g makemehapi</pre>
+</div>
+        </div>
+<div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 121px; height: auto;" data-block-id="0900974b942724ea8e4201490ece9f10">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 14;">
+<p>(props to Lin Clark)</p>
+</div>
+        </div></section><section>
+    <div class="sl-block" data-block-type="text" style="width: 800px; left: 79px; top: 50px; height: auto;" data-block-id="f0b994dcd65df50ece79794c988b2401">
+        <div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text">
+<h2>irc #hapi</h2>
+</div>
+        </div>
+        <div class="sl-block" data-block-type="image" style="width: 700px; height: 477.92068595927117px; left: 129px; top: 143px;" data-block-id="6279fb484aca345cbfd03019ef1ebb0f">
+            <div class="sl-block-content" style="border: 1px solid rgb(204, 204, 204);">
+                <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759219/hapiirc.jpg" style="visibility: visible;" data-natural-width="933" data-natural-height="637">
+            </div>
+        </div>
+    </section></section><section><div class="sl-block" data-block-type="text" style="width: 880px; left: 80px; top: 97px; height: auto;" data-block-id="44a0e9b7cbb0cfb35add68c4ac9a745c"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;" data-fragment-index="0">
+<h3 style="text-align:left">hapi is ridiculously easy to get started with, but it also totally supports all that weird http stuff like a champ</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 0px; top: 0px;" data-block-id="6510855d54076eb9bc36f684a984f3bc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; opacity: 0.16;">
+<h1>you guys,</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 262px;" data-block-id="ea82e71ed959b3b335222d30efba1e0a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;">
+<ul>
+	<li class="fragment" data-fragment-index="1">several flavors of auth</li>
+	<li class="fragment" data-fragment-index="1">https</li>
+	<li class="fragment" data-fragment-index="1">smart request routing</li>
+	<li class="fragment" data-fragment-index="1">streaming</li>
+	<li class="fragment" data-fragment-index="1">caching</li>
+	<li class="fragment" data-fragment-index="1">CORS</li>
+</ul>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 190px; height: auto;" data-block-id="f52e0856153cbe5cd58e56134d43baaf"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
+<h1>plugins!</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 287px; height: auto;" data-block-id="4ce8dc21bd1a9f1abfd3b4cd10bc61d7"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 13;" data-fragment-index="0">
+<h3>hapi has a really intuitive plugin architecture that lets you build your tools as plugins you can share among your hapi servers</h3>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 900px; left: 30px; top: 58px; height: auto;" data-block-id="b017c1e32b30cfa70ec72b853ebdd860"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left; z-index: 10;" data-placeholder-text="Text">
+<h1 style="text-align:center">HapChat</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 434px;" data-block-id="f7a5ee14da112548335ec19f7d4be0f3"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" data-fragment-index="0">
+<h2>don't call it a ripoff</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 30px; min-height: 30px; width: 171px; height: 171px; left: 395px; top: 241px;" data-block-id="af1d868adcef1c1e6b42cd10774de742"><div class="sl-block-content" style="z-index: 13;"><img src="https://s3.amazonaws.com/media-p.slid.es/uploads/jeffreywhite/images/759403/hapchat.png" style="visibility: visible;" data-natural-width="144" data-natural-height="144"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 497px;" data-block-id="a469e9f5dafb3f528a44a93ea01705dc"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;" data-fragment-index="1">
+<h2>cause that's mean</h2>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 900px; left: 30px; top: 58px; height: auto;" data-block-id="0589a7483514a89ce566bbcfc7cfb2ff"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left; z-index: 11;" data-placeholder-text="Text">
+<h1 style="text-align: center;">respect</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 331px;" data-block-id="32a9644fb056e38a6b7220a2d5db10a0"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;" data-fragment-index="0">
+<p>Don't be a yutz. Please read EmpireNode's Code of Conduct:</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 436px;" data-block-id="d5fb6b128174c406458515a5db0d0787"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;" data-fragment-index="0">
+<p><a href="http://jsconf.com/codeofconduct.html" target="_blank">http://jsconf.com/codeofconduct.html</a></p>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 900px; left: 30px; top: 58px; height: auto;" data-block-id="b0e59ea7be7c7d432d67a902789e907b"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left;" data-placeholder-text="Text">
+<h1>clone<br>
+the<br>
+repo</h1>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 900px; left: 30px; top: 58px; height: auto;" data-block-id="fc8fdbafe84a9b80f86cdc61d099d321"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left;" data-placeholder-text="Text">
+<h1>let's<br>
+talk project<br>
+layout</h1>
+</div></div></section><section><div class="sl-block" data-block-type="text" style="width: 900px; left: 30px; top: 58px; height: auto;" data-block-id="df217d3d794f9113e18107a9aedcd31b"><div class="sl-block-content" data-placeholder-tag="h1" style="font-size: 200%; text-align: left;" data-placeholder-text="Text">
+<h1>And<br>
+I'm<br>
+Done</h1>
+</div></div></section>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+      </div>
+
+    </div> <!--! end of #container -->
+
+<script>
+	var SLConfig = {"deck":{"id":260312,"slug":"hapchat-intro","title":"hapchat intro","description":"introducing hapchat","visibility":"all","published_at":"2014-10-24T16:58:16Z","sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/jeffreywhite/098d0a/hapchat-intro.jpg","view_count":20,"user":{"id":214114,"username":"jeffreywhite","name":"Jeffrey White","email":"j6white@gmail.com","description":null,"thumbnail_url":"//graph.facebook.com/556632360/picture","pro":false,"enterprise":false,"enterprise_manager":false,"notify_on_receipt":false,"billing_address":null,"editor_tutorial_completed":true,"registered":true},"background_transition":"slide","transition":"slide","theme_id":null,"theme_font":"montserrat","theme_color":"white-blue","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":true,"rolling_links":false,"center":false,"should_loop":false,"rtl":false,"version":2}};
+</script>
+    <script src="//slides.com/assets/application-31f8de17bc36de63bf9dc7b62e4e32bb.js" type="text/javascript"></script>
+    	<script src="//slides.com/assets/reveal.min-35217040707bbe8f235ae0a4684f4db2.js" type="text/javascript"></script>
+
+
+
+  </body>
+</html>
