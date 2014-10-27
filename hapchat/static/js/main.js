@@ -35,6 +35,7 @@
         var $previewImage = $('#preview');
         var $success = $('.alert-success');
         var $failure = $('.alert-danger');
+        var $save = $('#save');
 
         var printMessage = function (container, message) {
 
@@ -83,10 +84,11 @@
 
         $('#freeze').on('click',function () {
 
+            $save.removeClass('disabled');
             capture();
         });
 
-        $('#save').on('click', function () {
+        $save.on('click', function () {
 
             var form = new FormData();
             form.append('image', $previewImage.attr('src'));
@@ -105,6 +107,7 @@
                 printMessage($failure, 'There was a problem uploading your image.');
             }).always(function () {
 
+                $save.addClass('disabled');
                 $previewImage.attr('src','');
             });
         });
