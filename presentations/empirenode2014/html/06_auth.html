@@ -88,431 +88,437 @@
                         <li><a href="https://github.com/hapijs/hapi-auth-hawk">https://github.com/hapijs/hapi-auth-hawk</a></li>
                     </p>
                 </section>
-                <section>
-                    <h1>Basic Auth</h1>
-                    <pre><code data-trim contenteditable>
-// Load modules
-var Hapi = require('hapi');
-var Basic = require('hapi-auth-basic');
-                    </code></pre>
-                    <small>Load Hapi-auth-basic</small>
-                </section>
-                <section>
-                    <h3>Basic Auth</h3>
-                    <pre><code data-trim contenteditable>
-// User database
-var users = {
-    empire: {
-        password: 'node',
-        name: 'Empire Node User'
-    }
-};
-
-// Function used to validate a user
-var validate = function (username, password, callback) {
-
-    var user = users[username];
-    var isValid = user && user.password === password;
-    var credentials = { name: user.name } // request.auth.credentials
-
-    return callback(null, isValid, credentials);
-};
-                    </code></pre>
-                    <small>Create user database and validation function</small>
-                </section>
-                <section>
-                    <h3>Basic Auth</h3>
-                    <pre><code data-trim contenteditable>
-// Handlers
-var publicHandler = function (request, reply) {
-
-    reply('Everyone can see this...');
-};
-
-var privateHandler = function (request, reply) {
-
-    reply('Welcome' + request.auth.credentials.name);
-};
-                    </code></pre>
-                    <small>Private handler can be assured that request.auth.credentials is for a valid user</small>
-                </section>
-                <section>
-                    <h3>Basic Auth</h3>
-                    <pre><code data-trim contenteditable>
-// Create server
-var server = new Hapi.Server(8187);
-
-// Load plugins
-server.pack.register(Basic, function (err) {
-
-    // Configure auth scheme
-    var authOptions = {
-        validateFun: validate
-    };
-    server.auth.strategy('YourSimpleAuth', 'basic', authOptions);
+                <section class="stack">
+                    <section>
+                        <h1>Basic Auth</h1>
+                        <pre><code data-trim contenteditable>
+    // Load modules
+    var Hapi = require('hapi');
+    var Basic = require('hapi-auth-basic');
                         </code></pre>
-                        <small>Register basic plugin and configure auth strategy to use validate function</small>
+                        <small>Load Hapi-auth-basic</small>
                     </section>
                     <section>
                         <h3>Basic Auth</h3>
                         <pre><code data-trim contenteditable>
-
-    // Configure routes after plugins are loaded
-    server.route({
-        method: 'GET',
-        path: '/public',
-        handler: publicHandler
-    });
-
-    // Configure protected routes by setting auth
-    server.route({
-        method: 'GET',
-        path: '/private',
-        handler: privateHandler,
-        config: {
-            auth: 'YourSimpleAuth'
+    // User database
+    var users = {
+        empire: {
+            password: 'node',
+            name: 'Empire Node User'
         }
-    });
+    };
+
+    // Function used to validate a user
+    var validate = function (username, password, callback) {
+
+        var user = users[username];
+        var isValid = user && user.password === password;
+        var credentials = { name: user.name } // request.auth.credentials
+
+        return callback(null, isValid, credentials);
+    };
                         </code></pre>
-                        <small>Private handler gets an additional config param which references auth strategy</small>
+                        <small>Create user database and validation function</small>
                     </section>
                     <section>
                         <h3>Basic Auth</h3>
                         <pre><code data-trim contenteditable>
-    // Start server
-    server.start(function () { console.log('Started...'); });
-});
-                    </code></pre>
-                </section>
-                <section>
-                    <h1>Cookie Auth</h1>
-                    <pre><code data-trim contenteditable>
-// Load modules
-var Hapi = require('hapi');
-var AuthCookie = require('hapi-auth-cookie');
-var Joi = require('joi');
-                    </code></pre>
-                    <small>Load Hapi-auth-cookie plugin instead of basic and load Joi for payload validation</small>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-// User database
-var users = {
-    empire: {
-        password: 'node',
-        name: 'Empire Node User'
-    }
-};
-                    </code></pre>
-                    <small>Still need a user database to reference</small>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-// Handlers
-var validate = function (request, reply) {
+    // Handlers
+    var publicHandler = function (request, reply) {
 
-    var username = request.payload.username;
-    var password = request.payload.password;
-
-    var user = users[username];
-    var isValid = user && user.password === password;
-
-    if (!isValid) {
-        return reply().redirect('/login');
-    }
-
-    var credentials = { name: user.name } // request.auth.credentials
-
-    request.auth.session.set(credentials);
-    return reply('Logged In');
-};
-                    </code></pre>
-                    <small>Validation function becomes a handler and set's session cookie</small>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-var publicHandler = function (request, reply) {
-
-    reply('Everyone can see this...');
-};
-
-var privateHandler = function (request, reply) {
-
-    reply('Welcome ' + request.auth.credentials.name);
-};
-                    </code></pre>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-var loginPage = function (request, reply) {
-
-    var htmlForm = '<form method="post">' +
-                   '    <p>' +
-                   '        Username: <input type="text" name="username" /><br />' +
-                   '        Password: <input type="password" name="password" />' +
-                   '    </p>' +
-                   '    <p><input type="submit" value="login" /></p>' +
-                   '</form>';
-
-    reply(htmlForm);
-};
-                    </code></pre>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-var logout = function (request, reply) {
-
-    request.auth.session.clear();
-    reply('Logged out');
-};
-                    </code></pre>
-                    <small>Log out by clearing session cookie</small>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-// Create server
-var server = new Hapi.Server(8188);
-
-// Load plugins
-server.pack.register(AuthCookie, function (err) {
-
-    // Configure auth scheme
-    var authOptions = {
-        password: 'PasswordUsedToEncryptCookie',
-        cookie: 'NameOfCookie',
-        redirectTo: '/login',
-        isSecure: false
+        reply('Everyone can see this...');
     };
 
-    server.auth.strategy('YourCookieAuth', 'cookie', authOptions);
+    var privateHandler = function (request, reply) {
+
+        reply('Welcome' + request.auth.credentials.name);
+    };
                         </code></pre>
-                        <small>Register Hapi-auth-cookie plugin.  Auth strategy includes a url to redirect to if authentication fails</small>
+                        <small>Private handler can be assured that request.auth.credentials is for a valid user</small>
+                    </section>
+                    <section>
+                        <h3>Basic Auth</h3>
+                        <pre><code data-trim contenteditable>
+    // Create server
+    var server = new Hapi.Server(8187);
+
+    // Load plugins
+    server.pack.register(Basic, function (err) {
+
+        // Configure auth scheme
+        var authOptions = {
+            validateFun: validate
+        };
+        server.auth.strategy('YourSimpleAuth', 'basic', authOptions);
+                            </code></pre>
+                            <small>Register basic plugin and configure auth strategy to use validate function</small>
+                        </section>
+                        <section>
+                            <h3>Basic Auth</h3>
+                            <pre><code data-trim contenteditable>
+
+        // Configure routes after plugins are loaded
+        server.route({
+            method: 'GET',
+            path: '/public',
+            handler: publicHandler
+        });
+
+        // Configure protected routes by setting auth
+        server.route({
+            method: 'GET',
+            path: '/private',
+            handler: privateHandler,
+            config: {
+                auth: 'YourSimpleAuth'
+            }
+        });
+                            </code></pre>
+                            <small>Private handler gets an additional config param which references auth strategy</small>
+                        </section>
+                        <section>
+                            <h3>Basic Auth</h3>
+                            <pre><code data-trim contenteditable>
+        // Start server
+        server.start(function () { console.log('Started...'); });
+    });
+                        </code></pre>
+                    </section>
+                </section>
+                <section class="stack">
+                    <section>
+                        <h1>Cookie Auth</h1>
+                        <pre><code data-trim contenteditable>
+    // Load modules
+    var Hapi = require('hapi');
+    var AuthCookie = require('hapi-auth-cookie');
+    var Joi = require('joi');
+                        </code></pre>
+                        <small>Load Hapi-auth-cookie plugin instead of basic and load Joi for payload validation</small>
                     </section>
                     <section>
                         <h3>Cookie Auth</h3>
                         <pre><code data-trim contenteditable>
-    // Configure routes after plugins are loaded
-    server.route({
-        method: 'GET',
-        path: '/public',
-        handler: publicHandler
-    });
-
-    // Configure protected routes by setting auth
-    server.route({
-        method: 'GET',
-        path: '/private',
-        handler: privateHandler,
-        config: {
-            auth: 'YourCookieAuth'
+    // User database
+    var users = {
+        empire: {
+            password: 'node',
+            name: 'Empire Node User'
         }
-    });
-                    </code></pre>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
-    // Login page
-    server.route({
-        method: 'GET',
-        path: '/login',
-        handler: loginPage
-    });
+    };
+                        </code></pre>
+                        <small>Still need a user database to reference</small>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+    // Handlers
+    var validate = function (request, reply) {
 
-    // Logout
-    server.route({
-        method: 'GET',
-        path: '/logout',
-        handler: logout
-    });
-                    </code></pre>
-                </section>
-                <section>
-                    <h3>Cookie Auth</h3>
-                    <pre><code data-trim contenteditable>
+        var username = request.payload.username;
+        var password = request.payload.password;
 
-    // Login form post
-    server.route({
-        method: 'POST',
-        path: '/login',
-        handler: validate,
-        config: {
-            validate: {
-                payload: {
-                    username: Joi.string().required(),
-                    password: Joi.string().required()
-                }
-            }
+        var user = users[username];
+        var isValid = user && user.password === password;
+
+        if (!isValid) {
+            return reply().redirect('/login');
         }
-    });
 
-    // Start server
-    server.start(function () { console.log('Started...'); });
-});
-                    </code></pre>
-                    <small>POST to /login will validate payload automagically</small>
-                </section>
-                <section>
-                    <h1>Third Party Auth</h1>
-                    <pre><code data-trim contenteditable>
-// Load modules
-var Hapi = require('hapi');
-var Bell = require('bell');
-var AuthCookie = require('hapi-auth-cookie');
-                </code></pre>
-                <small>Include Bell but we still need Hapi-auth-cookie.  Bell must go out to third party for every route it's used for.  Use a combination of Bell and Hapi-auth-cookie.</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-// Handlers
-var publicHandler = function (request, reply) {
+        var credentials = { name: user.name } // request.auth.credentials
 
-    reply('Everyone can see this...');
-};
+        request.auth.session.set(credentials);
+        return reply('Logged In');
+    };
+                        </code></pre>
+                        <small>Validation function becomes a handler and set's session cookie</small>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+    var publicHandler = function (request, reply) {
 
-var privateHandler = function (request, reply) {
-
-    reply('Welcome ' + request.auth.credentials.name);
-};
-                </code></pre>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-var login = function (request, reply) {
-
-    if (request.auth.isAuthenticated) {
-        request.auth.session.set({
-            name: request.auth.credentials.profile.displayName
-        });
-        return reply('Logged in...');
-    }
-
-    reply('Not logged in...');
-}
-
-var logout = function (request, reply) {
-
-    request.auth.session.clear();
-    reply('Logged out...');
-}
-                </code></pre>
-                <small>Login handler will be processed after third party auth.  Set session if authenticated.</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-// Create server
-var server = new Hapi.Server(8189);
-
-// Load plugins
-server.pack.register([AuthCookie, Bell], function (err) {
-                </code></pre>
-                <small>Register Hapi-auth-cookie and Bell</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-    // Configure cookie auth scheme
-    server.auth.strategy('YourCookieAuth', 'cookie', {
-        password: 'PasswordUsedToEncryptCookie',
-        cookie: 'NameOfCookie',
-        redirectTo: '/login',
-        isSecure: false
-    });
-                </code></pre>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-    // Configure third party auth scheme
-    var bellAuthOptions = {
-        provider: 'github',
-        password: 'PasswordUsedToEncryptThirdPartyAuthCookie',
-        clientId: 'YourAppId',
-        clientSecret: 'YourAppSecret',
-        isSecure: false
+        reply('Everyone can see this...');
     };
 
-    server.auth.strategy('YourThirdPartyAuth', 'bell', bellAuthOptions);
-                </code></pre>
-                <small>Third party auth provider will produce clientId and clientSecret to be used when setting auth strategy.</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <img src="/images/auth/github-settings.png" />
-                <small>Click the Register New Application button in your Github account settings</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <img src="/images/auth/appdetails.png" />
-                <small>ClientId and clientSecret are shown with the application details</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-    // Configure routes after plugins are loaded
-    server.route({
-        method: 'GET',
-        path: '/public',
-        handler: publicHandler
-    });
+    var privateHandler = function (request, reply) {
 
-    // Configure protected routes by setting auth
-    server.route({
-        method: 'GET',
-        path: '/private',
-        handler: privateHandler,
-        config: {
-            auth: 'YourCookieAuth'
-        }
+        reply('Welcome ' + request.auth.credentials.name);
+    };
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+    var loginPage = function (request, reply) {
+
+        var htmlForm = '<form method="post">' +
+                       '    <p>' +
+                       '        Username: <input type="text" name="username" /><br />' +
+                       '        Password: <input type="password" name="password" />' +
+                       '    </p>' +
+                       '    <p><input type="submit" value="login" /></p>' +
+                       '</form>';
+
+        reply(htmlForm);
+    };
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+    var logout = function (request, reply) {
+
+        request.auth.session.clear();
+        reply('Logged out');
+    };
+                        </code></pre>
+                        <small>Log out by clearing session cookie</small>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+    // Create server
+    var server = new Hapi.Server(8188);
+
+    // Load plugins
+    server.pack.register(AuthCookie, function (err) {
+
+        // Configure auth scheme
+        var authOptions = {
+            password: 'PasswordUsedToEncryptCookie',
+            cookie: 'NameOfCookie',
+            redirectTo: '/login',
+            isSecure: false
+        };
+
+        server.auth.strategy('YourCookieAuth', 'cookie', authOptions);
+                            </code></pre>
+                            <small>Register Hapi-auth-cookie plugin.  Auth strategy includes a url to redirect to if authentication fails</small>
+                        </section>
+                        <section>
+                            <h3>Cookie Auth</h3>
+                            <pre><code data-trim contenteditable>
+        // Configure routes after plugins are loaded
+        server.route({
+            method: 'GET',
+            path: '/public',
+            handler: publicHandler
+        });
+
+        // Configure protected routes by setting auth
+        server.route({
+            method: 'GET',
+            path: '/private',
+            handler: privateHandler,
+            config: {
+                auth: 'YourCookieAuth'
+            }
+        });
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+        // Login page
+        server.route({
+            method: 'GET',
+            path: '/login',
+            handler: loginPage
+        });
+
+        // Logout
+        server.route({
+            method: 'GET',
+            path: '/logout',
+            handler: logout
+        });
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Cookie Auth</h3>
+                        <pre><code data-trim contenteditable>
+
+        // Login form post
+        server.route({
+            method: 'POST',
+            path: '/login',
+            handler: validate,
+            config: {
+                validate: {
+                    payload: {
+                        username: Joi.string().required(),
+                        password: Joi.string().required()
+                    }
+                }
+            }
+        });
+
+        // Start server
+        server.start(function () { console.log('Started...'); });
     });
-                </code></pre>
-                <small>Private pages use Cookie Auth, not Third Party Auth</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-    // Login page
-    server.route({
-        method: 'GET',
-        path: '/login',
-        handler: login,
-        config: {
-            auth: 'YourThirdPartyAuth'
-        }
-    });
-                </code></pre>
-                <small>Login page uses Third Party Auth and then sets session used in Cookie Auth</small>
-            </section>
-            <section>
-                <h3>Third Party Auth</h3>
-                <pre><code data-trim contenteditable>
-    // Logout
-    server.route({
-        method: 'GET',
-        path: '/logout',
-        handler: logout,
-        config: {
-            auth: 'YourCookieAuth'
-        }
-    });
+                        </code></pre>
+                        <small>POST to /login will validate payload automagically</small>
+                    </section>
+                </section>
+                <section class="stack">
+                    <section>
+                        <h1>Third Party Auth</h1>
+                        <pre><code data-trim contenteditable>
+    // Load modules
+    var Hapi = require('hapi');
+    var Bell = require('bell');
+    var AuthCookie = require('hapi-auth-cookie');
+                    </code></pre>
+                    <small>Include Bell but we still need Hapi-auth-cookie.  Bell must go out to third party for every route it's used for.  Use a combination of Bell and Hapi-auth-cookie.</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+    // Handlers
+    var publicHandler = function (request, reply) {
+
+        reply('Everyone can see this...');
+    };
+
+    var privateHandler = function (request, reply) {
+
+        reply('Welcome ' + request.auth.credentials.name);
+    };
                     </code></pre>
                 </section>
                 <section>
-                    <h3>About Bell</h3>
-                    <ul>
-                        <li>Existing support for many providers: facebook, github, google, instagram, live, twitter, yahoo, foursquare, bitbucket</li>
-                        <li>API for adding custom providers</li>
-                        <li>Supports OAuth1.0a and OAuth2</li>
-                    </ul>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+    var login = function (request, reply) {
+
+        if (request.auth.isAuthenticated) {
+            request.auth.session.set({
+                name: request.auth.credentials.profile.displayName
+            });
+            return reply('Logged in...');
+        }
+
+        reply('Not logged in...');
+    }
+
+    var logout = function (request, reply) {
+
+        request.auth.session.clear();
+        reply('Logged out...');
+    }
+                    </code></pre>
+                    <small>Login handler will be processed after third party auth.  Set session if authenticated.</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+    // Create server
+    var server = new Hapi.Server(8189);
+
+    // Load plugins
+    server.pack.register([AuthCookie, Bell], function (err) {
+                    </code></pre>
+                    <small>Register Hapi-auth-cookie and Bell</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+        // Configure cookie auth scheme
+        server.auth.strategy('YourCookieAuth', 'cookie', {
+            password: 'PasswordUsedToEncryptCookie',
+            cookie: 'NameOfCookie',
+            redirectTo: '/login',
+            isSecure: false
+        });
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+        // Configure third party auth scheme
+        var bellAuthOptions = {
+            provider: 'github',
+            password: 'PasswordUsedToEncryptThirdPartyAuthCookie',
+            clientId: 'YourAppId',
+            clientSecret: 'YourAppSecret',
+            isSecure: false
+        };
+
+        server.auth.strategy('YourThirdPartyAuth', 'bell', bellAuthOptions);
+                    </code></pre>
+                    <small>Third party auth provider will produce clientId and clientSecret to be used when setting auth strategy.</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <img src="/images/auth/github-settings.png" />
+                    <small>Click the Register New Application button in your Github account settings</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <img src="/images/auth/appdetails.png" />
+                    <small>ClientId and clientSecret are shown with the application details</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+        // Configure routes after plugins are loaded
+        server.route({
+            method: 'GET',
+            path: '/public',
+            handler: publicHandler
+        });
+
+        // Configure protected routes by setting auth
+        server.route({
+            method: 'GET',
+            path: '/private',
+            handler: privateHandler,
+            config: {
+                auth: 'YourCookieAuth'
+            }
+        });
+                    </code></pre>
+                    <small>Private pages use Cookie Auth, not Third Party Auth</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+        // Login page
+        server.route({
+            method: 'GET',
+            path: '/login',
+            handler: login,
+            config: {
+                auth: 'YourThirdPartyAuth'
+            }
+        });
+                    </code></pre>
+                    <small>Login page uses Third Party Auth and then sets session used in Cookie Auth</small>
+                </section>
+                <section>
+                    <h3>Third Party Auth</h3>
+                    <pre><code data-trim contenteditable>
+        // Logout
+        server.route({
+            method: 'GET',
+            path: '/logout',
+            handler: logout,
+            config: {
+                auth: 'YourCookieAuth'
+            }
+        });
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>About Bell</h3>
+                        <ul>
+                            <li>Existing support for many providers: facebook, github, google, instagram, live, twitter, yahoo, foursquare, bitbucket</li>
+                            <li>API for adding custom providers</li>
+                            <li>Supports OAuth1.0a and OAuth2</li>
+                        </ul>
+                    </section>
                 </section>
                 <section>
                     <h1>Fin.</h1>
