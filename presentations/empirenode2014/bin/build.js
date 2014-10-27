@@ -70,7 +70,7 @@ Async.waterfall([gettemplate, buildSlides, writeFile], function (err) {
         return process.exit(1);
     }
 
-    console.info('Slide deck built into ' + Path.join(internals.path, 'html','index.html'));
+    console.info('Slide deck built into [' + Path.join(internals.path, 'html','index.html') +']');
 
     process.exit(0);
 });
