@@ -123,6 +123,7 @@
             fileReader = new FileReader();
             fileReader.onload = function () {
 
+                $save.removeClass('disabled');
                 $previewImage.attr('src', fileReader.result);
             };
 
