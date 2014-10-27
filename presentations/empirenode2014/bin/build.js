@@ -39,7 +39,11 @@ var buildSlides = function (body, callback) {
 
                 var $ = Cheerio.load(result);
 
-                body('#deck').append($('div.slides>section'));
+                var slides = $('div.slides>section');
+                slides.find('div').removeAttr('style');
+                slides.find('div').removeAttr('class');
+
+                body('#deck').append(slides);
                 next();
 
             });
