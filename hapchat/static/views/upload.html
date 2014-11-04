@@ -4,6 +4,9 @@
     <button class="btn btn-default" id="freeze">
         <i class="fa fa-camera-retro"> Preview</i>
     </button>
+    <button class="btn btn-danger" id="retake">
+        <i class="fa fa-camera-retro"> Retake</i>
+    </button>
     <button class="btn btn-success disabled" id="save">
         <i class="fa fa-upload"> Save</i>
     </button>
@@ -18,7 +21,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6 col-xs-12">
+    <div id="videoContainer" class="col-md-6 col-xs-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Say Cheese!</h3>
@@ -28,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-xs-12">
+    <div id="previewContainer" class="col-md-6 col-xs-12">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Preview</h3>
