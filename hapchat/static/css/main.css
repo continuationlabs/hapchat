@@ -2,6 +2,8 @@
     margin: 0 auto;
     display: block;
     width: 100%;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 #preview, .hapchat-photo {

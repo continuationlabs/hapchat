@@ -30,6 +30,10 @@
 
     var photoCapture = function () {
 
+        // Hide preview pane and retake button on load
+        $('#previewContainer').hide();
+        $('#retake').hide();
+
         var video = $('#videoElement').get(0);
         var $fileSelect = $('#fileselect');
         var $previewImage = $('#preview');
@@ -82,10 +86,33 @@
             $('#preview').attr('src', canvas.toDataURL());
         };
 
-        $('#freeze').on('click',function () {
+        var togglePanes = function () {
+
+            if ($('#videoContainer').is(':visible')) {
+                $('#freeze').hide();
+                $('#retake').show();
+                $('#videoContainer').hide();
+                $('#previewContainer').show();
+            }
+            else {
+                $('#retake').hide();
+                $('#freeze').show();
+                $('#previewContainer').hide();
+                $('#videoContainer').show();
+            }
+        }
+
+        $('#freeze').on('click', function () {
 
             $save.removeClass('disabled');
+            togglePanes();
             capture();
+        });
+
+        $('#retake').on('click', function () {
+
+            $save.addClass('disabled');
+            togglePanes();
         });
 
         $save.on('click', function () {
@@ -109,6 +136,7 @@
 
                 $save.addClass('disabled');
                 $previewImage.attr('src','');
+                togglePanes();
             });
         });
 
